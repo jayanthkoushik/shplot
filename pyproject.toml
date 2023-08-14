@@ -1,13 +1,13 @@
 [tool.poetry]
-name = "project_TEMPLATE"
+name = "shplot"
 version = "0.0.0"  # managed by `poetry-dynamic-versioning`
-description = "description_TEMPLATE"
-authors = ["author_TEMPLATE <email_TEMPLATE>"]
+description = "Wrapper for Matplotlib/Seaborn"
+authors = ["Jayanth Koushik <mail@jkoushik.me>"]
 license = "MIT"
 readme = "README.md"
-repository = "repo_TEMPLATE"
+repository = "https://github.com/jayanthkoushik/shplot"
 packages = [
-  { include = "mainpackage_TEMPLATE" },
+  { include = "shplot" },
 ]
 include = [
   { path = "tests", format = "sdist" },
@@ -27,6 +27,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.8"
 typing_extensions = { version = "^4.0", python = "<3.9" }
+seaborn = "^0.12"
 
 [tool.poetry.extras]
 

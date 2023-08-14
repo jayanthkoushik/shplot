@@ -1,4 +1,4 @@
-# pyseed
+# shplot
 
 
-* [mainpackage_TEMPLATE package](mainpackage_TEMPLATE.md)
+* [shplot package](shplot.md)
