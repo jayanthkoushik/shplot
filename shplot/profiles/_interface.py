@@ -1,0 +1,561 @@
+import sys
+from abc import ABC
+from contextlib import contextmanager
+from importlib import reload
+
+if sys.version_info < (3, 9):
+    from typing_extensions import Any, Dict, List, Literal, Optional  # type: ignore
+else:
+    List = list
+    from typing import Any, Dict, Literal, Optional
+
+import matplotlib as mpl
+from corgy import Corgy, corgychecker, corgyparser
+from cycler import cycler
+from matplotlib import pyplot as plt
+
+__all__ = [
+    "ProfileBase",
+    "ColorProfile",
+    "FontProfile",
+    "PlotScaleProfile",
+    "PlottingProfile",
+]
+
+
+class ProfileBase(Corgy, corgy_make_slots=False):
+    """Base class for profiles.
+
+    Profile classes are thin wrappers around subsets of `matplotlib` parameters.
+    Once instantiated, they can be used to generate a dictionary which can be
+    used to update `matplotlib.rcParams`.
+
+    Profile classes have a dataclass-like interface. All attributes are exposed
+    as properties, and can be set either at initialization (as keyword arguments)
+    or later. Unless specified otherwise, attributes directly correspond to
+    `matplotlib` parameters with the same name.
+
+    Examples:
+        >>> from shplot.profiles import ColorProfile
+        >>> profile = ColorProfile(fg_secondary="gray")
+        >>> profile.rc()
+        {'grid.color': 'gray', 'legend.edgecolor': 'gray'}
+
+        >>> profile.grid_alpha = 0.5
+        >>> profile.rc()
+        {'grid.color': 'gray', 'legend.edgecolor': 'gray', 'grid.alpha': 0.5}
+
+    """
+
+    def _is_attr_set(self, attr: str) -> bool:
+        if attr not in self.attrs():
+            raise AttributeError(attr)
+        return hasattr(self, attr)
+
+    def rc(self) -> Dict[str, Any]:
+        """Return profile configuration as a `dict` of matplotlib `rcParams`.
+
+        Unset attributes are not included in the returned dictionary so that
+        different profiles can be combined together.
+        """
+        return self._rc()
+
+    def _rc(self) -> Dict[str, Any]:
+        raise NotImplementedError
+
+    def config(self, reload_mpl: bool = True):
+        """Update `matplotlib.rcParams` with profile configuration.
+
+        Args:
+            reload_mpl: Whether to reload `matplotlib` and `pyplot` modules
+                before applying the configuration. Reloading is necessary for
+                fonts to be updated.
+
+        Examples:
+            >>> import matplotlib as mpl
+            >>> print(mpl.rcParams["grid.color"])
+            #b0b0b0
+            >>> color_prof = ColorProfile(fg_secondary="gray")
+            >>> color_prof.config()
+            >>> print(mpl.rcParams["grid.color"])
+            gray
+
+        """
+        self._restore_rc(reload_mpl)
+        mpl.rcParams.update(self.rc())
+
+    @contextmanager
+    def context(self, reload_mpl: bool = True):
+        """Context manager for `config` method.
+
+        Args:
+            reload_mpl: Whether to first reload `matplotlib` and `pyplot` modules.
+
+        Examples:
+            >>> mpl.rcParams["grid.color"] = 'black'
+            >>> print(mpl.rcParams["grid.color"])
+            black
+            >>> color_prof = ColorProfile(fg_secondary="red")
+            >>> with color_prof.context():
+            ...     print(mpl.rcParams["grid.color"])
+            red
+            >>> print(mpl.rcParams["grid.color"])
+            black
+
+        """
+        current_rc = mpl.rcParams.copy()
+        try:
+            self.config(reload_mpl)
+            yield
+        finally:
+            self._restore_rc(reload_mpl, current_rc)
+
+    def _restore_rc(self, reload_mpl: bool = True, rc: Optional[Dict[str, Any]] = None):
+        global mpl, plt  # pylint: disable=global-statement
+        if reload_mpl:
+            mpl = reload(mpl)
+            plt = reload(plt)
+        else:
+            mpl.rcParams.clear()
+        if rc is None:
+            rc = mpl.rcParamsOrig
+        mpl.rcParams.update(rc)
+
+
+class ColorProfile(ProfileBase):
+    """Wrapper for color-related matplotlib params.
+
+    Attributes:
+        palette: `axes.prop_cycle` colors.
+        fg: Primary foreground color, used for text, axes lines, ticks, etc.
+        fg_secondary: Secondary foreground color, used for grid lines and legend frame.
+        bg: Axes and figure face color.
+        grid_alpha:
+        legend_frame_alpha:
+        transparent: Whether to save figures with transparent background.
+    """
+
+    palette: List[str]
+    fg: str
+    fg_secondary: str
+    bg: str
+    grid_alpha: float
+    legend_frame_alpha: float
+    transparent: bool
+
+    def _rc(self) -> Dict[str, Any]:
+        rc_dict: Dict[str, Any] = {}
+        if self._is_attr_set("palette"):
+            rc_dict["axes.prop_cycle"] = cycler("color", self.palette)
+        if self._is_attr_set("fg"):
+            rc_dict["patch.edgecolor"] = self.fg
+            rc_dict["hatch.color"] = self.fg
+            rc_dict["boxplot.flierprops.color"] = self.fg
+            rc_dict["boxplot.flierprops.markeredgecolor"] = self.fg
+            rc_dict["boxplot.boxprops.color"] = self.fg
+            rc_dict["boxplot.whiskerprops.color"] = self.fg
+            rc_dict["boxplot.capprops.color"] = self.fg
+            rc_dict["text.color"] = self.fg
+            rc_dict["axes.edgecolor"] = self.fg
+            rc_dict["axes.labelcolor"] = self.fg
+            rc_dict["xtick.color"] = self.fg
+            rc_dict["ytick.color"] = self.fg
+        if self._is_attr_set("fg_secondary"):
+            rc_dict["grid.color"] = self.fg_secondary
+            rc_dict["legend.edgecolor"] = self.fg_secondary
+        if self._is_attr_set("bg"):
+            rc_dict["axes.facecolor"] = self.bg
+            rc_dict["figure.facecolor"] = self.bg
+            rc_dict["figure.edgecolor"] = self.bg
+        if self._is_attr_set("grid_alpha"):
+            rc_dict["grid.alpha"] = self.grid_alpha
+        if self._is_attr_set("legend_frame_alpha"):
+            rc_dict["legend.framealpha"] = self.legend_frame_alpha
+        if self._is_attr_set("transparent"):
+            rc_dict["savefig.transparent"] = self.transparent
+        return rc_dict
+
+
+class FontProfile(ProfileBase):
+    """Wrapper for font-related matplotlib params.
+
+    Attributes:
+        family:
+        style:
+        variant:
+        weight:
+        stretch:
+        serif:
+        sans_serif:
+        monospace:
+        cursive:
+        fantasy:
+        text_usetex:
+        latex_preamble:
+        math_fontset:
+        custom_math_rm:
+        custom_math_sf:
+        custom_math_tt:
+        custom_math_it:
+        custom_math_bf:
+        custom_math_cal:
+        math_fallback:
+        math_default:
+        pgf_rcfonts:
+        set_pgf_preamble: Whether to set `pgf.preamble` using `latex_preamble`.
+    """
+
+    family: List[str]
+    style: Literal["normal", "italic", "oblique"]
+    variant: Literal["normal", "small-caps"]
+    weight: Literal[
+        "normal",
+        "bold",
+        "bolder",
+        "lighter",
+        "100",
+        "200",
+        "300",
+        "400",
+        "500",
+        "600",
+        "700",
+        "800",
+        "900",
+    ]
+    stretch: Literal[
+        "ultra-condensed",
+        "extra-condensed",
+        "condensed",
+        "semi-condensed",
+        "normal",
+        "semi-expanded",
+        "expanded",
+        "extra-expanded",
+        "ultra-expanded",
+        "wider",
+        "narrower",
+    ]
+    serif: List[str]
+    sans_serif: List[str]
+    monospace: List[str]
+    cursive: List[str]
+    fantasy: List[str]
+    text_usetex: bool
+    latex_preamble: List[str]
+    math_fontset: Literal[
+        "dejavusans", "dejavuserif", "cm", "stix", "stixsans", "custom"
+    ]
+    custom_math_rm: str
+    custom_math_sf: str
+    custom_math_tt: str
+    custom_math_it: str
+    custom_math_bf: str
+    custom_math_cal: str
+    math_fallback: Literal["cm", "stix", "stixsans", "None"]
+    math_default: Literal[
+        "rm", "cal", "it", "tt", "sf", "bf", "default", "bb", "frak", "scr", "regular"
+    ]
+    pgf_rcfonts: bool
+    set_pgf_preamble: bool = True
+
+    def _rc(self) -> Dict[str, Any]:
+        rc_dict: Dict[str, Any] = {}
+        if self._is_attr_set("family"):
+            rc_dict["font.family"] = self.family
+        if self._is_attr_set("style"):
+            rc_dict["font.style"] = self.style
+        if self._is_attr_set("variant"):
+            rc_dict["font.variant"] = self.variant
+        if self._is_attr_set("weight"):
+            rc_dict["font.weight"] = self.weight
+        if self._is_attr_set("stretch"):
+            rc_dict["font.stretch"] = self.stretch
+        if self._is_attr_set("serif"):
+            rc_dict["font.serif"] = self.serif
+        if self._is_attr_set("sans_serif"):
+            rc_dict["font.sans-serif"] = self.sans_serif
+        if self._is_attr_set("monospace"):
+            rc_dict["font.monospace"] = self.monospace
+        if self._is_attr_set("cursive"):
+            rc_dict["font.cursive"] = self.cursive
+        if self._is_attr_set("fantasy"):
+            rc_dict["font.fantasy"] = self.fantasy
+        if self._is_attr_set("text_usetex"):
+            rc_dict["text.usetex"] = self.text_usetex
+        if self._is_attr_set("latex_preamble"):
+            rc_dict["text.latex.preamble"] = "\n".join(self.latex_preamble)
+            if self.set_pgf_preamble:
+                rc_dict["pgf.preamble"] = rc_dict["text.latex.preamble"]
+        if self._is_attr_set("math_fontset"):
+            rc_dict["mathtext.fontset"] = self.math_fontset
+        if self._is_attr_set("custom_math_rm"):
+            rc_dict["mathtext.rm"] = self.custom_math_rm
+        if self._is_attr_set("custom_math_sf"):
+            rc_dict["mathtext.sf"] = self.custom_math_sf
+        if self._is_attr_set("custom_math_tt"):
+            rc_dict["mathtext.tt"] = self.custom_math_tt
+        if self._is_attr_set("custom_math_bf"):
+            rc_dict["mathtext.bf"] = self.custom_math_bf
+        if self._is_attr_set("custom_math_it"):
+            rc_dict["mathtext.it"] = self.custom_math_it
+        if self._is_attr_set("custom_math_cal"):
+            rc_dict["mathtext.cal"] = self.custom_math_cal
+        if self._is_attr_set("math_fallback"):
+            rc_dict["mathtext.fallback"] = self.math_fallback
+        if self._is_attr_set("math_default"):
+            rc_dict["mathtext.default"] = self.math_default
+        if self._is_attr_set("pgf_rcfonts"):
+            rc_dict["pgf.rcfonts"] = self.pgf_rcfonts
+        return rc_dict
+
+
+class PlotScaleProfile(ProfileBase):
+    """Wrapper for plot scale-related matplotlib params.
+
+    Attributes:
+        font_size:
+        axes_title_size:
+        axes_label_size:
+        xtick_label_size:
+        ytick_label_size:
+        legend_font_size:
+        legend_title_size:
+        figure_title_size:
+        figure_label_size:
+        marker_size:
+        line_width:
+        full_width_in: Default figure width in inches.
+        default_aspect_wh: Default figure aspect ratio (width/height).
+        legend_marker_scale:
+        subplot_left:
+        subplot_right:
+        subplot_bottom:
+        subplot_top:
+        subplot_hspace:
+        subplot_wspace:
+        autolayout:
+        constrained_layout:
+        constrained_layout_hspace:
+        constrained_layout_wspace:
+    """
+
+    class FloatOrStr(ABC):
+        """Float or string type."""
+
+        __metavar__ = "float|str"
+
+    FloatOrStr.register(float)
+    FloatOrStr.register(str)
+
+    font_size: float
+    axes_title_size: FloatOrStr
+    axes_label_size: FloatOrStr
+    xtick_label_size: FloatOrStr
+    ytick_label_size: FloatOrStr
+    legend_font_size: FloatOrStr
+    legend_title_size: FloatOrStr
+    figure_title_size: FloatOrStr
+    figure_label_size: FloatOrStr
+    marker_size: float
+    line_width: float
+    full_width_in: float
+    default_aspect_wh: float
+    legend_marker_scale: float
+    subplot_left: float
+    subplot_right: float
+    subplot_bottom: float
+    subplot_top: float
+    subplot_hspace: float
+    subplot_wspace: float
+    autolayout: bool
+    constrained_layout: bool
+    constrained_layout_hspace: float
+    constrained_layout_wspace: float
+
+    @corgychecker("axes_title_size")
+    @corgychecker("axes_label_size")
+    @corgychecker("xtick_label_size")
+    @corgychecker("ytick_label_size")
+    @corgychecker("legend_font_size")
+    @corgychecker("legend_title_size")
+    @corgychecker("figure_title_size")
+    @corgychecker("figure_label_size")
+    @staticmethod
+    def _check_maybe_relative_size(val: FloatOrStr):
+        if isinstance(val, float):
+            return
+        if val in (
+            "xx-small",
+            "x-small",
+            "small",
+            "medium",
+            "large",
+            "x-large",
+            "xx-large",
+        ):
+            return
+        raise ValueError(f"invalid value for size: {val!r}")
+
+    @corgyparser("axes_title_size")
+    @corgyparser("axes_label_size")
+    @corgyparser("xtick_label_size")
+    @corgyparser("ytick_label_size")
+    @corgyparser("legend_font_size")
+    @corgyparser("legend_title_size")
+    @corgyparser("figure_title_size")
+    @corgyparser("figure_label_size")
+    @staticmethod
+    def _parse_float_or_str(val):
+        try:
+            val = float(val)
+        except ValueError:
+            pass
+        PlotScaleProfile._check_maybe_relative_size(val)
+        return val
+
+    def _rc(self) -> Dict[str, Any]:
+        rc_dict: Dict[str, Any] = {}
+        if self._is_attr_set("font_size"):
+            small_font_size = self.font_size * 3 / 5
+            smaller_font_size = self.font_size * 2 / 5
+            smallest_font_size = self.font_size * 1 / 5
+            rc_dict["font.size"] = self.font_size
+            rc_dict["axes.titlepad"] = small_font_size
+            rc_dict["axes.labelpad"] = smaller_font_size
+            rc_dict["xtick.major.size"] = smaller_font_size
+            rc_dict["ytick.major.size"] = smaller_font_size
+            rc_dict["xtick.minor.size"] = smallest_font_size
+            rc_dict["ytick.minor.size"] = smallest_font_size
+            rc_dict["xtick.major.pad"] = smaller_font_size
+            rc_dict["ytick.major.pad"] = smaller_font_size
+            rc_dict["xtick.minor.pad"] = smaller_font_size
+            rc_dict["ytick.minor.pad"] = smaller_font_size
+            rc_dict["figure.constrained_layout.h_pad"] = smaller_font_size / 72  # in pt
+            rc_dict["figure.constrained_layout.w_pad"] = smaller_font_size / 72
+        if self._is_attr_set("axes_title_size"):
+            rc_dict["axes.titlesize"] = self.axes_title_size
+        if self._is_attr_set("axes_label_size"):
+            rc_dict["axes.labelsize"] = self.axes_label_size
+        if self._is_attr_set("xtick_label_size"):
+            rc_dict["xtick.labelsize"] = self.xtick_label_size
+        if self._is_attr_set("ytick_label_size"):
+            rc_dict["ytick.labelsize"] = self.ytick_label_size
+        if self._is_attr_set("legend_font_size"):
+            rc_dict["legend.fontsize"] = self.legend_font_size
+        if self._is_attr_set("legend_title_size"):
+            rc_dict["legend.title_fontsize"] = self.legend_title_size
+        if self._is_attr_set("figure_title_size"):
+            rc_dict["figure.titlesize"] = self.figure_title_size
+        if self._is_attr_set("figure_label_size"):
+            rc_dict["figure.labelsize"] = self.figure_label_size
+        if self._is_attr_set("marker_size"):
+            rc_dict["lines.markersize"] = self.marker_size
+            rc_dict["boxplot.flierprops.markersize"] = self.marker_size
+            rc_dict["boxplot.meanprops.markersize"] = self.marker_size
+        if self._is_attr_set("line_width"):
+            thin_line_width = self.line_width * 2 / 3
+            thinner_line_width = self.line_width * 2 / 4
+            thinnest_line_width = self.line_width * 2 / 5
+            rc_dict["lines.linewidth"] = self.line_width
+            rc_dict["lines.markeredgewidth"] = thin_line_width
+            rc_dict["patch.linewidth"] = thin_line_width
+            rc_dict["hatch.linewidth"] = thin_line_width
+            rc_dict["boxplot.whiskers"] = self.line_width
+            rc_dict["boxplot.flierprops.markeredgewidth"] = thin_line_width
+            rc_dict["boxplot.flierprops.linewidth"] = thin_line_width
+            rc_dict["boxplot.boxprops.linewidth"] = thin_line_width
+            rc_dict["boxplot.whiskerprops.linewidth"] = thin_line_width
+            rc_dict["boxplot.capprops.linewidth"] = thin_line_width
+            rc_dict["boxplot.medianprops.linewidth"] = thin_line_width
+            rc_dict["boxplot.meanprops.linewidth"] = thin_line_width
+            rc_dict["axes.linewidth"] = thinner_line_width
+            rc_dict["xtick.major.width"] = thinner_line_width
+            rc_dict["ytick.major.width"] = thinner_line_width
+            rc_dict["xtick.minor.width"] = thinnest_line_width
+            rc_dict["ytick.minor.width"] = thinnest_line_width
+            rc_dict["grid.linewidth"] = thinner_line_width
+        if self._is_attr_set("full_width_in") or self._is_attr_set("default_aspect"):
+            orig_figsize = mpl.rcParamsOrig["figure.figsize"]
+            try:
+                default_width = self.full_width_in
+            except AttributeError:
+                default_width = orig_figsize[0]
+            try:
+                default_aspect = self.default_aspect_wh
+            except AttributeError:
+                default_aspect = orig_figsize[0] / orig_figsize[1]
+            rc_dict["figure.figsize"] = (default_width, default_width / default_aspect)
+        if self._is_attr_set("legend_marker_scale"):
+            rc_dict["legend.markerscale"] = self.legend_marker_scale
+        if self._is_attr_set("subplot_left"):
+            rc_dict["figure.subplot.left"] = self.subplot_left
+        if self._is_attr_set("subplot_right"):
+            rc_dict["figure.subplot.right"] = self.subplot_right
+        if self._is_attr_set("subplot_bottom"):
+            rc_dict["figure.subplot.bottom"] = self.subplot_bottom
+        if self._is_attr_set("subplot_top"):
+            rc_dict["figure.subplot.top"] = self.subplot_top
+        if self._is_attr_set("subplot_hspace"):
+            rc_dict["figure.subplot.hspace"] = self.subplot_hspace
+        if self._is_attr_set("subplot_wspace"):
+            rc_dict["figure.subplot.wspace"] = self.subplot_wspace
+        if self._is_attr_set("autolayout"):
+            rc_dict["figure.autolayout"] = self.autolayout
+        if self._is_attr_set("constrained_layout"):
+            rc_dict["figure.constrained_layout.use"] = self.constrained_layout
+        if self._is_attr_set("constrained_layout_hspace"):
+            rc_dict["figure.constrained_layout.hspace"] = self.constrained_layout_hspace
+        if self._is_attr_set("constrained_layout_wspace"):
+            rc_dict["figure.constrained_layout.wspace"] = self.constrained_layout_wspace
+
+        return rc_dict
+
+
+class PlottingProfile(ProfileBase):
+    """Wrapper for color, font, and scale profiles.
+
+    All arguments for initialization are optional, and must be passed as keyword
+    arguments. Arguments other than `color`, `font`, and `scale` are used to
+    update `matplotlib.rcParams` directly, and will override any values set by
+    the profile.
+
+    Attributes:
+        color:
+        font:
+        scale:
+
+    Examples:
+        >>> from shplot.profiles import PlottingProfile, ColorProfile
+        >>> color_profile = ColorProfile(fg_secondary="gray")
+        >>> rc_extra = {"backend": "Agg", "legend.edgecolor": "darkgray"}
+        >>> profile = PlottingProfile(color=color_profile, **rc_extra)
+        >>> profile.rc()
+        {'grid.color': 'gray', 'legend.edgecolor': 'darkgray', 'backend': 'Agg'}
+
+    """
+
+    color: ColorProfile
+    font: FontProfile
+    scale: PlotScaleProfile
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        for attr in self.attrs():
+            try:
+                del kwargs[attr]
+            except KeyError:
+                pass
+        self._rc_extra = kwargs
+
+    def _rc(self) -> Dict[str, Any]:
+        rc_dict: Dict[str, Any] = {}
+        if self._is_attr_set("color"):
+            rc_dict.update(self.color.rc())
+        if self._is_attr_set("font"):
+            rc_dict.update(self.font.rc())
+        if self._is_attr_set("scale"):
+            rc_dict.update(self.scale.rc())
+
+        rc_dict.update(self._rc_extra)
+        return rc_dict

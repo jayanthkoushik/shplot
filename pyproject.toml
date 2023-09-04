@@ -28,6 +28,7 @@ classifiers = [
 python = "^3.8"
 typing_extensions = { version = "^4.0", python = "<3.9" }
 seaborn = "^0.12"
+corgy = "^9.1"
 
 [tool.poetry.extras]
 
@@ -38,8 +39,13 @@ isort = "^5.1"
 pylint = "^2.14"
 mypy = "^1.1"
 pydocstyle = "^6.1"
-sphinx = "^4.2"
+sphinx = "^5.3"
 sphinx-markdown-builder = { git = "https://github.com/clayrisser/sphinx-markdown-builder" }
+
+[tool.poetry.group.webdocs.dependencies]
+mkdocstrings = { extras = ["python"], version = "^0.22.0" }
+mkdocs-material = "^9.1.15"
+mike = "^1.1.2"
 
 [tool.poetry-dynamic-versioning]
 enable = true

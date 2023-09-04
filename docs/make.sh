@@ -9,7 +9,7 @@ poetry run sphinx-apidoc \
     --module-first \
     --tocfile index \
     --separate \
-    . tests
+    . tests plot_demos.py
 
 poetry run sphinx-build \
     -C \

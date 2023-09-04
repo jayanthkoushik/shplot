@@ -1,0 +1,16 @@
+::: shplot.profiles.builtin.SH_BUILTIN_PROFILES
+::: shplot.profiles.builtin.ShPaperProfile
+::: shplot.profiles.builtin.ShBookProfile
+::: shplot.profiles.builtin.ShWebProfile
+::: shplot.profiles.builtin.ShPresentationProfile
+::: shplot.profiles.builtin.ShFontsetupFontProfile
+::: shplot.profiles.builtin.ShPGFRcFontsFontProfile
+::: shplot.profiles.builtin.CUD_PALETTE
+::: shplot.profiles.builtin.ShLightCUDProfile
+::: shplot.profiles.builtin.BSLightCUDProfile
+::: shplot.profiles.builtin.BSDarkCUDProfile
+::: shplot.profiles.builtin.ShScaleProfile
+::: shplot.profiles.builtin.ShPaperScaleProfile
+::: shplot.profiles.builtin.ShBookScaleProfile
+::: shplot.profiles.builtin.ShWebScaleProfile
+::: shplot.profiles.builtin.ShPresentationScaleProfile

@@ -2,6 +2,29 @@
   "maxDuplicateProblems": 1,
   "languageId": "python",
   "words": [
-    "shplot"
+    "subpackages",
+    "shplot",
+    "matplotlib",
+    "pyplot",
+    "seaborn",
+    "darkgray",
+    "fontsetup",
+    "edgecolor",
+    "rcfonts",
+    "fontspec",
+    "normalsize",
+    "footnotesize",
+    "usetex",
+    "fontset",
+    "xtick",
+    "ytick",
+    "hspace",
+    "wspace",
+    "autolayout",
+    "dejavuserif",
+    "dejavusans",
+    "stix",
+    "stixsans",
+    "frak"
   ]
 }
