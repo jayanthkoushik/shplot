@@ -4,9 +4,17 @@ from contextlib import contextmanager
 from importlib import reload
 
 if sys.version_info < (3, 9):
-    from typing_extensions import Any, Dict, List, Literal, Optional  # type: ignore
+    from typing_extensions import (  # type: ignore
+        Any,
+        Dict,
+        List,
+        Literal,
+        Optional,
+        Set,
+    )
 else:
     List = list
+    Set = set
     from typing import Any, Dict, Literal, Optional
 
 import matplotlib as mpl
@@ -19,6 +27,7 @@ __all__ = [
     "ColorProfile",
     "FontProfile",
     "PlotScaleProfile",
+    "AxesProfile",
     "PlottingProfile",
 ]
 
@@ -512,11 +521,158 @@ class PlotScaleProfile(ProfileBase):
         return rc_dict
 
 
+class AxesProfile(ProfileBase):
+    """Wrapper for axes-related matplotlib params.
+
+    Attributes:
+        grid_axes: Which axes to draw grid lines on.
+        grid_lines: Which grid lines to draw.
+        spines: Which sides to draw spines on.
+        xtick_major_lines: Where to draw major x-axis tick lines.
+        xtick_minor_lines: Where to draw minor x-axis tick lines.
+        xtick_labels: Where to draw x-axis tick labels.
+        xtick_direction: Direction of x-axis ticks.
+        xtick_alignment: Alignment of x-axis tick labels.
+        xlabel_position: Position of x-axis label.
+        ytick_major_lines: Where to draw major y-axis tick lines.
+        ytick_minor_lines: Where to draw minor y-axis tick lines.
+        ytick_labels: Where to draw y-axis tick labels.
+        ytick_direction: Direction of y-axis ticks.
+        ytick_alignment: Alignment of y-axis tick labels.
+        ylabel_position: Position of y-axis label.
+    """
+
+    grid_axes: Set[Literal["x", "y"]]
+    grid_lines: Set[Literal["major", "minor"]]
+
+    spines: Set[Literal["left", "right", "bottom", "top"]]
+
+    xtick_major_lines: Set[Literal["bottom", "top"]]
+    xtick_minor_lines: Set[Literal["bottom", "top"]]
+    xtick_labels: Set[Literal["bottom", "top"]]
+    xtick_direction: Literal["in", "out", "inout"]
+    xtick_alignment: Literal["left", "center", "right"]
+    xlabel_position: Literal["left", "center", "right"]
+
+    ytick_major_lines: Set[Literal["left", "right"]]
+    ytick_minor_lines: Set[Literal["left", "right"]]
+    ytick_labels: Set[Literal["left", "right"]]
+    ytick_direction: Literal["in", "out", "inout"]
+    ytick_alignment: Literal["bottom", "center", "top", "baseline", "center_baseline"]
+    ylabel_position: Literal["bottom", "center", "top"]
+
+    def _rc(self) -> Dict[str, Any]:
+        rc_dict: Dict[str, Any] = {}
+
+        if (self._is_attr_set("grid_axes") and not self.grid_axes) or (
+            self._is_attr_set("grid_lines") and not self.grid_lines
+        ):
+            rc_dict["axes.grid"] = False
+        elif self._is_attr_set("grid_axes") or self._is_attr_set("grid_lines"):
+            rc_dict["axes.grid"] = True
+
+        if self._is_attr_set("grid_axes"):
+            if "x" in self.grid_axes and "y" in self.grid_axes:
+                rc_dict["axes.grid.axis"] = "both"
+            elif "x" in self.grid_axes:
+                rc_dict["axes.grid.axis"] = "x"
+            elif "y" in self.grid_axes:
+                rc_dict["axes.grid.axis"] = "y"
+
+        if self._is_attr_set("grid_lines"):
+            if "major" in self.grid_lines and "minor" in self.grid_lines:
+                rc_dict["axes.grid.which"] = "both"
+            elif "major" in self.grid_lines:
+                rc_dict["axes.grid.which"] = "major"
+            elif "minor" in self.grid_lines:
+                rc_dict["axes.grid.which"] = "minor"
+
+        if self._is_attr_set("spines"):
+            rc_dict["axes.spines.left"] = "left" in self.spines
+            rc_dict["axes.spines.right"] = "right" in self.spines
+            rc_dict["axes.spines.bottom"] = "bottom" in self.spines
+            rc_dict["axes.spines.top"] = "top" in self.spines
+
+        if self._is_attr_set("xtick_major_lines"):
+            if "bottom" in self.xtick_major_lines:
+                rc_dict["xtick.major.bottom"] = True
+                rc_dict["xtick.bottom"] = True
+            else:
+                rc_dict["xtick.major.bottom"] = False
+            if "top" in self.xtick_major_lines:
+                rc_dict["xtick.major.top"] = True
+                rc_dict["xtick.top"] = True
+            else:
+                rc_dict["xtick.major.top"] = False
+
+        if self._is_attr_set("xtick_minor_lines"):
+            rc_dict["xtick.minor.visible"] = bool(self.xtick_minor_lines)
+            if "bottom" in self.xtick_minor_lines:
+                rc_dict["xtick.minor.bottom"] = True
+                rc_dict["xtick.bottom"] = True
+            else:
+                rc_dict["xtick.minor.bottom"] = False
+            if "top" in self.xtick_minor_lines:
+                rc_dict["xtick.minor.top"] = True
+                rc_dict["xtick.top"] = True
+            else:
+                rc_dict["xtick.minor.top"] = False
+
+        if self._is_attr_set("xtick_labels"):
+            rc_dict["xtick.label.bottom"] = "bottom" in self.xtick_labels
+            rc_dict["xtick.label.top"] = "top" in self.xtick_labels
+
+        if self._is_attr_set("xtick_direction"):
+            rc_dict["xtick.direction"] = self.xtick_direction
+        if self._is_attr_set("xtick_alignment"):
+            rc_dict["xtick.alignment"] = self.xtick_alignment
+        if self._is_attr_set("xlabel_position"):
+            rc_dict["xaxis.labellocation"] = self.xlabel_position
+
+        if self._is_attr_set("ytick_major_lines"):
+            if "left" in self.ytick_major_lines:
+                rc_dict["ytick.major.left"] = True
+                rc_dict["ytick.left"] = True
+            else:
+                rc_dict["ytick.major.left"] = False
+            if "right" in self.ytick_major_lines:
+                rc_dict["ytick.major.right"] = True
+                rc_dict["ytick.right"] = True
+            else:
+                rc_dict["ytick.major.right"] = False
+
+        if self._is_attr_set("ytick_minor_lines"):
+            rc_dict["ytick.minor.visible"] = bool(self.ytick_minor_lines)
+            if "left" in self.ytick_minor_lines:
+                rc_dict["ytick.minor.left"] = True
+                rc_dict["ytick.left"] = True
+            else:
+                rc_dict["ytick.minor.left"] = False
+            if "right" in self.ytick_minor_lines:
+                rc_dict["ytick.minor.right"] = True
+                rc_dict["ytick.right"] = True
+            else:
+                rc_dict["ytick.minor.right"] = False
+
+        if self._is_attr_set("ytick_labels"):
+            rc_dict["ytick.label.left"] = "left" in self.ytick_labels
+            rc_dict["ytick.label.right"] = "right" in self.ytick_labels
+
+        if self._is_attr_set("ytick_direction"):
+            rc_dict["ytick.direction"] = self.ytick_direction
+        if self._is_attr_set("ytick_alignment"):
+            rc_dict["ytick.alignment"] = self.ytick_alignment
+        if self._is_attr_set("ylabel_position"):
+            rc_dict["yaxis.labellocation"] = self.ylabel_position
+
+        return rc_dict
+
+
 class PlottingProfile(ProfileBase):
-    """Wrapper for color, font, and scale profiles.
+    """Wrapper for color, font, scale, and axes profiles.
 
     All arguments for initialization are optional, and must be passed as keyword
-    arguments. Arguments other than `color`, `font`, and `scale` are used to
+    arguments. Arguments other than `color`, `font`, `scale`, and `axes` are used to
     update `matplotlib.rcParams` directly, and will override any values set by
     the profile.
 
@@ -524,6 +680,7 @@ class PlottingProfile(ProfileBase):
         color:
         font:
         scale:
+        axes:
 
     Examples:
         >>> from shplot.profiles import PlottingProfile, ColorProfile
@@ -538,6 +695,7 @@ class PlottingProfile(ProfileBase):
     color: ColorProfile
     font: FontProfile
     scale: PlotScaleProfile
+    axes: AxesProfile
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -556,6 +714,8 @@ class PlottingProfile(ProfileBase):
             rc_dict.update(self.font.rc())
         if self._is_attr_set("scale"):
             rc_dict.update(self.scale.rc())
+        if self._is_attr_set("axes"):
+            rc_dict.update(self.axes.rc())
 
         rc_dict.update(self._rc_extra)
         return rc_dict

@@ -14,5 +14,6 @@
             * [`ColorProfile`](shplot.profiles.md#shplot.profiles.ColorProfile)
             * [`FontProfile`](shplot.profiles.md#shplot.profiles.FontProfile)
             * [`PlotScaleProfile`](shplot.profiles.md#shplot.profiles.PlotScaleProfile)
+            * [`AxesProfile`](shplot.profiles.md#shplot.profiles.AxesProfile)
             * [`PlottingProfile`](shplot.profiles.md#shplot.profiles.PlottingProfile)
             * [Submodules](shplot.profiles.md#submodules)

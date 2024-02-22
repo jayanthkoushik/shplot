@@ -548,11 +548,165 @@ Default figure aspect ratio (width/height).
 Float or string type.
 
 
+### _class_ shplot.profiles.AxesProfile(\*\*args)
+Wrapper for axes-related matplotlib params.
+
+
+#### grid_axes()
+Which axes to draw grid lines on.
+
+
+* **Type**
+
+    Set[typing_extensions.Literal[x, y]]
+
+
+
+#### grid_lines()
+Which grid lines to draw.
+
+
+* **Type**
+
+    Set[typing_extensions.Literal[major, minor]]
+
+
+
+#### spines()
+Which sides to draw spines on.
+
+
+* **Type**
+
+    Set[typing_extensions.Literal[left, right, bottom, top]]
+
+
+
+#### xtick_major_lines()
+Where to draw major x-axis tick lines.
+
+
+* **Type**
+
+    Set[typing_extensions.Literal[bottom, top]]
+
+
+
+#### xtick_minor_lines()
+Where to draw minor x-axis tick lines.
+
+
+* **Type**
+
+    Set[typing_extensions.Literal[bottom, top]]
+
+
+
+#### xtick_labels()
+Where to draw x-axis tick labels.
+
+
+* **Type**
+
+    Set[typing_extensions.Literal[bottom, top]]
+
+
+
+#### xtick_direction()
+Direction of x-axis ticks.
+
+
+* **Type**
+
+    typing_extensions.Literal[in, out, inout]
+
+
+
+#### xtick_alignment()
+Alignment of x-axis tick labels.
+
+
+* **Type**
+
+    typing_extensions.Literal[left, center, right]
+
+
+
+#### xlabel_position()
+Position of x-axis label.
+
+
+* **Type**
+
+    typing_extensions.Literal[left, center, right]
+
+
+
+#### ytick_major_lines()
+Where to draw major y-axis tick lines.
+
+
+* **Type**
+
+    Set[typing_extensions.Literal[left, right]]
+
+
+
+#### ytick_minor_lines()
+Where to draw minor y-axis tick lines.
+
+
+* **Type**
+
+    Set[typing_extensions.Literal[left, right]]
+
+
+
+#### ytick_labels()
+Where to draw y-axis tick labels.
+
+
+* **Type**
+
+    Set[typing_extensions.Literal[left, right]]
+
+
+
+#### ytick_direction()
+Direction of y-axis ticks.
+
+
+* **Type**
+
+    typing_extensions.Literal[in, out, inout]
+
+
+
+#### ytick_alignment()
+Alignment of y-axis tick labels.
+
+
+* **Type**
+
+    typing_extensions.Literal[bottom, center, top, baseline, center_baseline]
+
+
+
+#### ylabel_position()
+Position of y-axis label.
+
+
+* **Type**
+
+    typing_extensions.Literal[bottom, center, top]
+
+
+
 ### _class_ shplot.profiles.PlottingProfile(\*\*kwargs)
-Wrapper for color, font, and scale profiles.
+Wrapper for color, font, scale, and axes profiles.
 
 All arguments for initialization are optional, and must be passed as keyword
-arguments. Arguments other than `color`, `font`, and `scale` are used to
+arguments. Arguments other than `color`, `font`, `scale`, and `axes` are used to
 update `matplotlib.rcParams` directly, and will override any values set by
 the profile.
 
@@ -578,6 +732,14 @@ the profile.
 * **Type**
 
     [shplot.profiles._interface.PlotScaleProfile](#shplot.profiles.PlotScaleProfile)
+
+
+
+#### axes()
+
+* **Type**
+
+    [shplot.profiles._interface.AxesProfile](#shplot.profiles.AxesProfile)
 
 
 ### Examples

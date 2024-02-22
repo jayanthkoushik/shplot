@@ -76,10 +76,29 @@
         * [`PlotScaleProfile.FloatOrStr`](shplot.profiles.md#shplot.profiles.PlotScaleProfile.FloatOrStr)
 
 
+    * [`AxesProfile`](shplot.profiles.md#shplot.profiles.AxesProfile)
+        * [`AxesProfile.grid_axes`](shplot.profiles.md#shplot.profiles.AxesProfile.grid_axes)
+        * [`AxesProfile.grid_lines`](shplot.profiles.md#shplot.profiles.AxesProfile.grid_lines)
+        * [`AxesProfile.spines`](shplot.profiles.md#shplot.profiles.AxesProfile.spines)
+        * [`AxesProfile.xtick_major_lines`](shplot.profiles.md#shplot.profiles.AxesProfile.xtick_major_lines)
+        * [`AxesProfile.xtick_minor_lines`](shplot.profiles.md#shplot.profiles.AxesProfile.xtick_minor_lines)
+        * [`AxesProfile.xtick_labels`](shplot.profiles.md#shplot.profiles.AxesProfile.xtick_labels)
+        * [`AxesProfile.xtick_direction`](shplot.profiles.md#shplot.profiles.AxesProfile.xtick_direction)
+        * [`AxesProfile.xtick_alignment`](shplot.profiles.md#shplot.profiles.AxesProfile.xtick_alignment)
+        * [`AxesProfile.xlabel_position`](shplot.profiles.md#shplot.profiles.AxesProfile.xlabel_position)
+        * [`AxesProfile.ytick_major_lines`](shplot.profiles.md#shplot.profiles.AxesProfile.ytick_major_lines)
+        * [`AxesProfile.ytick_minor_lines`](shplot.profiles.md#shplot.profiles.AxesProfile.ytick_minor_lines)
+        * [`AxesProfile.ytick_labels`](shplot.profiles.md#shplot.profiles.AxesProfile.ytick_labels)
+        * [`AxesProfile.ytick_direction`](shplot.profiles.md#shplot.profiles.AxesProfile.ytick_direction)
+        * [`AxesProfile.ytick_alignment`](shplot.profiles.md#shplot.profiles.AxesProfile.ytick_alignment)
+        * [`AxesProfile.ylabel_position`](shplot.profiles.md#shplot.profiles.AxesProfile.ylabel_position)
+
+
     * [`PlottingProfile`](shplot.profiles.md#shplot.profiles.PlottingProfile)
         * [`PlottingProfile.color`](shplot.profiles.md#shplot.profiles.PlottingProfile.color)
         * [`PlottingProfile.font`](shplot.profiles.md#shplot.profiles.PlottingProfile.font)
         * [`PlottingProfile.scale`](shplot.profiles.md#shplot.profiles.PlottingProfile.scale)
+        * [`PlottingProfile.axes`](shplot.profiles.md#shplot.profiles.PlottingProfile.axes)
 
 
     * [Submodules](shplot.profiles.md#submodules)
