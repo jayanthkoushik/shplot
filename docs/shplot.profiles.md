@@ -582,6 +582,16 @@ Which sides to draw spines on.
 
 
 
+#### axis_below()
+Where to draw axis grid lines and ticks.
+
+
+* **Type**
+
+    typing_extensions.Literal[all, line, none]
+
+
+
 #### xtick_major_lines()
 Where to draw major x-axis tick lines.
 

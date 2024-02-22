@@ -528,6 +528,7 @@ class AxesProfile(ProfileBase):
         grid_axes: Which axes to draw grid lines on.
         grid_lines: Which grid lines to draw.
         spines: Which sides to draw spines on.
+        axis_below: Where to draw axis grid lines and ticks.
         xtick_major_lines: Where to draw major x-axis tick lines.
         xtick_minor_lines: Where to draw minor x-axis tick lines.
         xtick_labels: Where to draw x-axis tick labels.
@@ -546,6 +547,7 @@ class AxesProfile(ProfileBase):
     grid_lines: Set[Literal["major", "minor"]]
 
     spines: Set[Literal["left", "right", "bottom", "top"]]
+    axis_below: Literal["all", "line", "none"]
 
     xtick_major_lines: Set[Literal["bottom", "top"]]
     xtick_minor_lines: Set[Literal["bottom", "top"]]
@@ -592,6 +594,14 @@ class AxesProfile(ProfileBase):
             rc_dict["axes.spines.right"] = "right" in self.spines
             rc_dict["axes.spines.bottom"] = "bottom" in self.spines
             rc_dict["axes.spines.top"] = "top" in self.spines
+
+        if self._is_attr_set("axis_below"):
+            if self.axis_below == "all":
+                rc_dict["axes.axisbelow"] = True
+            elif self.axis_below == "line":
+                rc_dict["axes.axisbelow"] = "line"
+            elif self.axis_below == "none":
+                rc_dict["axes.axisbelow"] = False
 
         if self._is_attr_set("xtick_major_lines"):
             if "bottom" in self.xtick_major_lines:

@@ -80,6 +80,7 @@
         * [`AxesProfile.grid_axes`](shplot.profiles.md#shplot.profiles.AxesProfile.grid_axes)
         * [`AxesProfile.grid_lines`](shplot.profiles.md#shplot.profiles.AxesProfile.grid_lines)
         * [`AxesProfile.spines`](shplot.profiles.md#shplot.profiles.AxesProfile.spines)
+        * [`AxesProfile.axis_below`](shplot.profiles.md#shplot.profiles.AxesProfile.axis_below)
         * [`AxesProfile.xtick_major_lines`](shplot.profiles.md#shplot.profiles.AxesProfile.xtick_major_lines)
         * [`AxesProfile.xtick_minor_lines`](shplot.profiles.md#shplot.profiles.AxesProfile.xtick_minor_lines)
         * [`AxesProfile.xtick_labels`](shplot.profiles.md#shplot.profiles.AxesProfile.xtick_labels)
