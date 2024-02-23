@@ -529,36 +529,40 @@ class AxesProfile(ProfileBase):
         grid_lines: Which grid lines to draw.
         spines: Which sides to draw spines on.
         axis_below: Where to draw axis grid lines and ticks.
-        xtick_major_lines: Where to draw major x-axis tick lines.
-        xtick_minor_lines: Where to draw minor x-axis tick lines.
-        xtick_labels: Where to draw x-axis tick labels.
+        xticks_top: Which tick lines to draw on the top x-axis.
+        xticks_bottom: Which tick lines to draw on the bottom x-axis.
+        xlabels_top: Whether to show labels on the top x-axis.
+        xlabels_bottom: Whether to show labels on the bottom x-axis.
         xtick_direction: Direction of x-axis ticks.
         xtick_alignment: Alignment of x-axis tick labels.
         xlabel_position: Position of x-axis label.
-        ytick_major_lines: Where to draw major y-axis tick lines.
-        ytick_minor_lines: Where to draw minor y-axis tick lines.
-        ytick_labels: Where to draw y-axis tick labels.
+        yticks_left: Which tick lines to draw on the left y-axis.
+        yticks_right: Which tick lines to draw on the right y-axis.
+        ylabels_left: Whether to show labels on the left y-axis.
+        ylabels_right: Whether to show labels on the right y-axis.
         ytick_direction: Direction of y-axis ticks.
         ytick_alignment: Alignment of y-axis tick labels.
         ylabel_position: Position of y-axis label.
     """
 
-    grid_axes: Set[Literal["x", "y"]]
-    grid_lines: Set[Literal["major", "minor"]]
+    grid_axes: Literal["x", "y", "both", "none"]
+    grid_lines: Literal["major", "minor", "both"]
 
     spines: Set[Literal["left", "right", "bottom", "top"]]
     axis_below: Literal["all", "line", "none"]
 
-    xtick_major_lines: Set[Literal["bottom", "top"]]
-    xtick_minor_lines: Set[Literal["bottom", "top"]]
-    xtick_labels: Set[Literal["bottom", "top"]]
+    xticks_top: Literal["none", "major", "both"]
+    xticks_bottom: Literal["none", "major", "both"]
+    xlabels_top: bool
+    xlabels_bottom: bool
     xtick_direction: Literal["in", "out", "inout"]
     xtick_alignment: Literal["left", "center", "right"]
     xlabel_position: Literal["left", "center", "right"]
 
-    ytick_major_lines: Set[Literal["left", "right"]]
-    ytick_minor_lines: Set[Literal["left", "right"]]
-    ytick_labels: Set[Literal["left", "right"]]
+    yticks_left: Literal["none", "major", "both"]
+    yticks_right: Literal["none", "major", "both"]
+    ylabels_left: bool
+    ylabels_right: bool
     ytick_direction: Literal["in", "out", "inout"]
     ytick_alignment: Literal["bottom", "center", "top", "baseline", "center_baseline"]
     ylabel_position: Literal["bottom", "center", "top"]
@@ -566,28 +570,16 @@ class AxesProfile(ProfileBase):
     def _rc(self) -> Dict[str, Any]:
         rc_dict: Dict[str, Any] = {}
 
-        if (self._is_attr_set("grid_axes") and not self.grid_axes) or (
-            self._is_attr_set("grid_lines") and not self.grid_lines
-        ):
+        if self._is_attr_set("grid_axes") and self.grid_axes == "none":
             rc_dict["axes.grid"] = False
-        elif self._is_attr_set("grid_axes") or self._is_attr_set("grid_lines"):
+        elif self._is_attr_set("grid_axes"):
             rc_dict["axes.grid"] = True
-
-        if self._is_attr_set("grid_axes"):
-            if "x" in self.grid_axes and "y" in self.grid_axes:
-                rc_dict["axes.grid.axis"] = "both"
-            elif "x" in self.grid_axes:
-                rc_dict["axes.grid.axis"] = "x"
-            elif "y" in self.grid_axes:
-                rc_dict["axes.grid.axis"] = "y"
-
+            rc_dict["axes.grid.axis"] = self.grid_axes
         if self._is_attr_set("grid_lines"):
-            if "major" in self.grid_lines and "minor" in self.grid_lines:
-                rc_dict["axes.grid.which"] = "both"
-            elif "major" in self.grid_lines:
-                rc_dict["axes.grid.which"] = "major"
-            elif "minor" in self.grid_lines:
-                rc_dict["axes.grid.which"] = "minor"
+            rc_dict["axes.grid.which"] = self.grid_lines
+            if self.grid_lines != "major":
+                rc_dict["xtick.minor.visible"] = True
+                rc_dict["ytick.minor.visible"] = True
 
         if self._is_attr_set("spines"):
             rc_dict["axes.spines.left"] = "left" in self.spines
@@ -603,77 +595,45 @@ class AxesProfile(ProfileBase):
             elif self.axis_below == "none":
                 rc_dict["axes.axisbelow"] = False
 
-        if self._is_attr_set("xtick_major_lines"):
-            if "bottom" in self.xtick_major_lines:
-                rc_dict["xtick.major.bottom"] = True
-                rc_dict["xtick.bottom"] = True
-            else:
-                rc_dict["xtick.major.bottom"] = False
-            if "top" in self.xtick_major_lines:
-                rc_dict["xtick.major.top"] = True
-                rc_dict["xtick.top"] = True
-            else:
-                rc_dict["xtick.major.top"] = False
+        for tb in ("top", "bottom"):
+            if self._is_attr_set(f"xticks_{tb}"):
+                attr = getattr(self, f"xticks_{tb}")
+                if attr == "none":
+                    rc_dict[f"xtick.{tb}"] = False
+                else:
+                    rc_dict[f"xtick.{tb}"] = True
+                    rc_dict[f"xtick.major.{tb}"] = True
+                    rc_dict[f"xtick.minor.{tb}"] = attr == "both"
+            if self._is_attr_set(f"xlabels_{tb}"):
+                if getattr(self, f"xlabels_{tb}"):
+                    rc_dict[f"xtick.label{tb}"] = True
+                    rc_dict[f"xtick.major.{tb}"] = True
+                else:
+                    rc_dict[f"xtick.label{tb}"] = False
 
-        if self._is_attr_set("xtick_minor_lines"):
-            rc_dict["xtick.minor.visible"] = bool(self.xtick_minor_lines)
-            if "bottom" in self.xtick_minor_lines:
-                rc_dict["xtick.minor.bottom"] = True
-                rc_dict["xtick.bottom"] = True
-            else:
-                rc_dict["xtick.minor.bottom"] = False
-            if "top" in self.xtick_minor_lines:
-                rc_dict["xtick.minor.top"] = True
-                rc_dict["xtick.top"] = True
-            else:
-                rc_dict["xtick.minor.top"] = False
+        for lr in ("left", "right"):
+            if self._is_attr_set(f"yticks_{lr}"):
+                attr = getattr(self, f"yticks_{lr}")
+                if attr == "none":
+                    rc_dict[f"ytick.{lr}"] = False
+                else:
+                    rc_dict[f"ytick.{lr}"] = True
+                    rc_dict[f"ytick.major.{lr}"] = True
+                    rc_dict[f"ytick.minor.{lr}"] = attr == "both"
+            if self._is_attr_set(f"ylabels_{lr}"):
+                if getattr(self, f"ylabels_{lr}"):
+                    rc_dict[f"ytick.label{lr}"] = True
+                    rc_dict[f"ytick.major.{lr}"] = True
+                else:
+                    rc_dict[f"ytick.label{lr}"] = False
 
-        if self._is_attr_set("xtick_labels"):
-            rc_dict["xtick.label.bottom"] = "bottom" in self.xtick_labels
-            rc_dict["xtick.label.top"] = "top" in self.xtick_labels
-
-        if self._is_attr_set("xtick_direction"):
-            rc_dict["xtick.direction"] = self.xtick_direction
-        if self._is_attr_set("xtick_alignment"):
-            rc_dict["xtick.alignment"] = self.xtick_alignment
-        if self._is_attr_set("xlabel_position"):
-            rc_dict["xaxis.labellocation"] = self.xlabel_position
-
-        if self._is_attr_set("ytick_major_lines"):
-            if "left" in self.ytick_major_lines:
-                rc_dict["ytick.major.left"] = True
-                rc_dict["ytick.left"] = True
-            else:
-                rc_dict["ytick.major.left"] = False
-            if "right" in self.ytick_major_lines:
-                rc_dict["ytick.major.right"] = True
-                rc_dict["ytick.right"] = True
-            else:
-                rc_dict["ytick.major.right"] = False
-
-        if self._is_attr_set("ytick_minor_lines"):
-            rc_dict["ytick.minor.visible"] = bool(self.ytick_minor_lines)
-            if "left" in self.ytick_minor_lines:
-                rc_dict["ytick.minor.left"] = True
-                rc_dict["ytick.left"] = True
-            else:
-                rc_dict["ytick.minor.left"] = False
-            if "right" in self.ytick_minor_lines:
-                rc_dict["ytick.minor.right"] = True
-                rc_dict["ytick.right"] = True
-            else:
-                rc_dict["ytick.minor.right"] = False
-
-        if self._is_attr_set("ytick_labels"):
-            rc_dict["ytick.label.left"] = "left" in self.ytick_labels
-            rc_dict["ytick.label.right"] = "right" in self.ytick_labels
-
-        if self._is_attr_set("ytick_direction"):
-            rc_dict["ytick.direction"] = self.ytick_direction
-        if self._is_attr_set("ytick_alignment"):
-            rc_dict["ytick.alignment"] = self.ytick_alignment
-        if self._is_attr_set("ylabel_position"):
-            rc_dict["yaxis.labellocation"] = self.ylabel_position
+        for xy in ("x", "y"):
+            if self._is_attr_set(f"{xy}tick_direction"):
+                rc_dict[f"{xy}tick.direction"] = getattr(self, f"{xy}tick_direction")
+            if self._is_attr_set(f"{xy}tick_alignment"):
+                rc_dict[f"{xy}tick.alignment"] = getattr(self, f"{xy}tick_alignment")
+            if self._is_attr_set("xlabel_position"):
+                rc_dict["xaxis.labellocation"] = self.xlabel_position
 
         return rc_dict
 

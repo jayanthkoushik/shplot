@@ -558,7 +558,7 @@ Which axes to draw grid lines on.
 
 * **Type**
 
-    Set[typing_extensions.Literal[x, y]]
+    typing_extensions.Literal[x, y, both, none]
 
 
 
@@ -568,7 +568,7 @@ Which grid lines to draw.
 
 * **Type**
 
-    Set[typing_extensions.Literal[major, minor]]
+    typing_extensions.Literal[major, minor, both]
 
 
 
@@ -592,33 +592,43 @@ Where to draw axis grid lines and ticks.
 
 
 
-#### xtick_major_lines()
-Where to draw major x-axis tick lines.
+#### xticks_top()
+Which tick lines to draw on the top x-axis.
 
 
 * **Type**
 
-    Set[typing_extensions.Literal[bottom, top]]
+    typing_extensions.Literal[none, major, both]
 
 
 
-#### xtick_minor_lines()
-Where to draw minor x-axis tick lines.
-
-
-* **Type**
-
-    Set[typing_extensions.Literal[bottom, top]]
-
-
-
-#### xtick_labels()
-Where to draw x-axis tick labels.
+#### xticks_bottom()
+Which tick lines to draw on the bottom x-axis.
 
 
 * **Type**
 
-    Set[typing_extensions.Literal[bottom, top]]
+    typing_extensions.Literal[none, major, both]
+
+
+
+#### xlabels_top()
+Whether to show labels on the top x-axis.
+
+
+* **Type**
+
+    bool
+
+
+
+#### xlabels_bottom()
+Whether to show labels on the bottom x-axis.
+
+
+* **Type**
+
+    bool
 
 
 
@@ -652,33 +662,43 @@ Position of x-axis label.
 
 
 
-#### ytick_major_lines()
-Where to draw major y-axis tick lines.
+#### yticks_left()
+Which tick lines to draw on the left y-axis.
 
 
 * **Type**
 
-    Set[typing_extensions.Literal[left, right]]
+    typing_extensions.Literal[none, major, both]
 
 
 
-#### ytick_minor_lines()
-Where to draw minor y-axis tick lines.
-
-
-* **Type**
-
-    Set[typing_extensions.Literal[left, right]]
-
-
-
-#### ytick_labels()
-Where to draw y-axis tick labels.
+#### yticks_right()
+Which tick lines to draw on the right y-axis.
 
 
 * **Type**
 
-    Set[typing_extensions.Literal[left, right]]
+    typing_extensions.Literal[none, major, both]
+
+
+
+#### ylabels_left()
+Whether to show labels on the left y-axis.
+
+
+* **Type**
+
+    bool
+
+
+
+#### ylabels_right()
+Whether to show labels on the right y-axis.
+
+
+* **Type**
+
+    bool
 
 
 
