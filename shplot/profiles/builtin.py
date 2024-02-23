@@ -8,7 +8,13 @@ if sys.version_info < (3, 9):
 else:
     from typing import Callable, Dict, Literal
 
-from ._interface import ColorProfile, FontProfile, PlotScaleProfile, PlottingProfile
+from ._interface import (
+    AxesProfile,
+    ColorProfile,
+    FontProfile,
+    PlotScaleProfile,
+    PlottingProfile,
+)
 
 __all__ = [
     "SH_BUILTIN_PROFILES",
@@ -295,30 +301,104 @@ class ShPGFRcFontsFontProfile(FontProfile):
 
 
 ############################################################
+# AXES PROFILES
+
+
+class ShPrintAxesProfile(AxesProfile):
+    """Axes profile for print."""
+
+    def __init__(self):
+        super().__init__(
+            grid_axes="none",
+            spines={"left", "bottom"},
+            axis_below="all",
+            xticks_top="none",
+            xticks_bottom="major",
+            xlabels_top=False,
+            xlabels_bottom=True,
+            xtick_direction="inout",
+            xtick_alignment="center",
+            xlabel_position="center",
+            yticks_left="major",
+            yticks_right="none",
+            ylabels_left=True,
+            ylabels_right=False,
+            ytick_direction="inout",
+            ytick_alignment="center_baseline",
+            ylabel_position="center",
+        )
+
+
+class ShWebAxesProfile(AxesProfile):
+    """Axes profile for web."""
+
+    def __init__(self):
+        super().__init__(
+            grid_axes="both",
+            grid_lines="major",
+            spines=set(),
+            axis_below="all",
+            xticks_top="none",
+            xticks_bottom="none",
+            xlabels_top=False,
+            xlabels_bottom=True,
+            xtick_direction="in",
+            xtick_alignment="center",
+            xlabel_position="center",
+            yticks_left="none",
+            yticks_right="none",
+            ylabels_left=True,
+            ylabels_right=False,
+            ytick_direction="in",
+            ytick_alignment="center_baseline",
+            ylabel_position="center",
+        )
+
+
+class ShPresentationAxesProfile(AxesProfile):
+    """Axes profile for presentation."""
+
+    def __init__(self):
+        super().__init__(
+            grid_axes="y",
+            grid_lines="major",
+            spines={"bottom"},
+            axis_below="all",
+            xticks_top="none",
+            xticks_bottom="major",
+            xlabels_top=False,
+            xlabels_bottom=True,
+            xtick_direction="out",
+            xtick_alignment="center",
+            xlabel_position="center",
+            yticks_left="none",
+            yticks_right="none",
+            ylabels_left=True,
+            ylabels_right=False,
+            ytick_direction="inout",
+            ytick_alignment="center_baseline",
+            ylabel_position="center",
+        )
+
+
+############################################################
 # FULL PROFILES
 
 
-sh_rc_overrides = {
-    "axes.grid": True,
-    "axes.grid.axis": "y",
-    "axes.axisbelow": True,  # draw grid lines below all plot elements
-    "axes.spines.left": False,
-    "axes.spines.bottom": False,
-    "axes.spines.top": False,
-    "axes.spines.right": False,
-    "xtick.direction": "in",
-    "ytick.direction": "in",
-    "ytick.left": False,
-    "figure.titleweight": "bold",
-    "pdf.fonttype": 42,
-}
+sh_rc_overrides = {"figure.titleweight": "bold"}
 
 
 class _ShFontsetupProfile(PlottingProfile):
     def __init__(self, font: ShFontsetupFontProfile.FontType, **kwargs):
         super().__init__(
             font=ShFontsetupFontProfile(font),
-            **{"backend": "pgf", "savefig.format": "pdf", **sh_rc_overrides, **kwargs},
+            **{
+                "backend": "pgf",
+                "savefig.format": "pdf",
+                "pdf.fonttype": 42,
+                **sh_rc_overrides,
+                **kwargs,
+            },
         )
 
 
@@ -332,7 +412,11 @@ class ShPaperProfile(_ShFontsetupProfile):
 
     def __init__(self, font: ShFontsetupFontProfile.FontType = "default", **rc_extra):
         super().__init__(
-            font, color=ShLightCUDProfile(), scale=ShPaperScaleProfile(), **rc_extra
+            font,
+            color=ShLightCUDProfile(),
+            scale=ShPaperScaleProfile(),
+            axes=ShPrintAxesProfile(),
+            **rc_extra,
         )
 
 
@@ -346,7 +430,11 @@ class ShBookProfile(_ShFontsetupProfile):
 
     def __init__(self, font: ShFontsetupFontProfile.FontType = "default", **rc_extra):
         super().__init__(
-            font, color=ShLightCUDProfile(), scale=ShBookScaleProfile(), **rc_extra
+            font,
+            color=ShLightCUDProfile(),
+            scale=ShBookScaleProfile(),
+            axes=ShPrintAxesProfile(),
+            **rc_extra,
         )
 
 
@@ -407,6 +495,7 @@ class ShWebProfile(PlottingProfile):
             color=color_profile,
             font=font_profile,
             scale=ShWebScaleProfile(),
+            axes=ShWebAxesProfile(),
             **{
                 "backend": "svg",
                 "svg.fonttype": "path",
@@ -443,6 +532,7 @@ class ShPresentationProfile(PlottingProfile):
                 font_family, base_font, serif_font, sans_serif_font, monospace_font
             ),
             scale=ShPresentationScaleProfile(dpi),
+            axes=ShPresentationAxesProfile(),
             **{
                 "backend": "pgf",
                 "savefig.format": "png",
