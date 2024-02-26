@@ -218,19 +218,7 @@ class FontProfile(ProfileBase):
     style: Literal["normal", "italic", "oblique"]
     variant: Literal["normal", "small-caps"]
     weight: Literal[
-        "normal",
-        "bold",
-        "bolder",
-        "lighter",
-        "100",
-        "200",
-        "300",
-        "400",
-        "500",
-        "600",
-        "700",
-        "800",
-        "900",
+        "normal", "bold", "100", "200", "300", "400", "500", "600", "700", "800", "900",
     ]
     stretch: Literal[
         "ultra-condensed",
@@ -484,7 +472,7 @@ class PlotScaleProfile(ProfileBase):
             rc_dict["xtick.minor.width"] = thinnest_line_width
             rc_dict["ytick.minor.width"] = thinnest_line_width
             rc_dict["grid.linewidth"] = thinner_line_width
-        if self._is_attr_set("full_width_in") or self._is_attr_set("default_aspect"):
+        if self._is_attr_set("full_width_in") or self._is_attr_set("default_aspect_wh"):
             orig_figsize = mpl.rcParamsOrig["figure.figsize"]
             try:
                 default_width = self.full_width_in

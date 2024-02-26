@@ -186,7 +186,7 @@ Wrapper for font-related matplotlib params.
 
 * **Type**
 
-    typing_extensions.Literal[normal, bold, bolder, lighter, 100, 200, 300, 400, 500, 600, 700, 800, 900]
+    typing_extensions.Literal[normal, bold, 100, 200, 300, 400, 500, 600, 700, 800, 900]
 
 
 
