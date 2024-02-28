@@ -89,7 +89,10 @@ class ShScaleProfile(PlotScaleProfile):
     """Builder for scale profiles.
 
     Args:
-        fs/fs_*: Font sizes (in points) for different elements.
+        fs: Base font size (in points).
+        fs_small: Small font size (in points).
+        fs_smaller: Smaller font size (in points).
+        fs_large: Large font size (in points).
         marker_size: Default marker size (in points).
         line_width: Default line width (in points).
         full_width_in: Default figure width (in inches).
@@ -274,9 +277,12 @@ class ShPGFRcFontsFontProfile(FontProfile):
         family: Default font family.
         base_font: One of the fonts supported by `fontsetup`. This value is
             passed as the sole argument to the package.
-        serif/sans_serif/monospace: Overrides for serif/sans-serif/monospace
-            families. If `None`, values from `rcParams` (`font.serif` etc.)
+        serif: Override for serif font. If `None`, `font.serif` from `rcParams`
             will be used.
+        sans_serif: Override for sans-serif font. If `None`, `font.sans-serif`
+            from `rcParams` will be used.
+        monospace: Override for monospace font. If `None`, `font.monospace`
+            from `rcParams` will be used.
     """
 
     def __init__(
@@ -389,9 +395,9 @@ sh_rc_overrides = {"figure.titleweight": "bold"}
 
 
 class _ShFontsetupProfile(PlottingProfile):
-    def __init__(self, font: ShFontsetupFontProfile.FontType, **kwargs):
+    def __init__(self, fontname: ShFontsetupFontProfile.FontType, **kwargs):
         super().__init__(
-            font=ShFontsetupFontProfile(font),
+            font=ShFontsetupFontProfile(fontname),
             **{
                 "backend": "pgf",
                 "savefig.format": "pdf",
@@ -406,13 +412,15 @@ class ShPaperProfile(_ShFontsetupProfile):
     """Profile for generating figures for a paper (10pt).
 
     Args:
-        font: Name of the font to use--see `ShFontsetupFontProfile`.
+        fontname: Name of the font to use--see `ShFontsetupFontProfile`.
         **rc_extra: `rcParams` overrides.
     """
 
-    def __init__(self, font: ShFontsetupFontProfile.FontType = "default", **rc_extra):
+    def __init__(
+        self, fontname: ShFontsetupFontProfile.FontType = "default", **rc_extra
+    ):
         super().__init__(
-            font,
+            fontname,
             color=ShLightCUDProfile(),
             scale=ShPaperScaleProfile(),
             axes=ShPrintAxesProfile(),
@@ -424,13 +432,15 @@ class ShBookProfile(_ShFontsetupProfile):
     """Profile for generating figures for a book (12pt).
 
     Args:
-        font: Name of the font to use--see `ShFontsetupFontProfile`.
+        fontname: Name of the font to use--see `ShFontsetupFontProfile`.
         **rc_extra: `rcParams` overrides.
     """
 
-    def __init__(self, font: ShFontsetupFontProfile.FontType = "default", **rc_extra):
+    def __init__(
+        self, fontname: ShFontsetupFontProfile.FontType = "default", **rc_extra
+    ):
         super().__init__(
-            font,
+            fontname,
             color=ShLightCUDProfile(),
             scale=ShBookScaleProfile(),
             axes=ShPrintAxesProfile(),
@@ -511,7 +521,10 @@ class ShPresentationProfile(PlottingProfile):
 
     Args:
         font_family: Default font family.
-        *_font: See `ShPGFRcFontsFontProfile`.
+        base_font: See `ShPGFRcFontsFontProfile`.
+        serif_font: See `ShPGFRcFontsFontProfile`.
+        sans_serif_font: See `ShPGFRcFontsFontProfile`.
+        monospace_font: See `ShPGFRcFontsFontProfile`.
         dpi: See `ShPresentationScaleProfile`.
         **rc_extra: `rcParams` overrides.
     """

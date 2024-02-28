@@ -2,11 +2,9 @@ name: Build and deploy project webiste
 
 on:
   push:
-    branches:
-    - master
     paths:
     - 'shplot/**.py'
-    - 'docs/www/**'
+    - 'www/**'
     - 'README.md'
     - '.github/workflows/build-site.yml'
     - 'mkdocs.yml'

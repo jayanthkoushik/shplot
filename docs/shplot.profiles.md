@@ -2,6 +2,8 @@
 
 
 ### _class_ shplot.profiles.ProfileBase(\*\*args)
+Bases: `Corgy`
+
 Base class for profiles.
 
 Profile classes are thin wrappers around subsets of `matplotlib` parameters.
@@ -36,13 +38,19 @@ Unset attributes are not included in the returned dictionary so that
 different profiles can be combined together.
 
 
+* **Return type**
+
+    *Dict*[str, *Any*]
+
+
+
 #### config(reload_mpl=True)
 Update `matplotlib.rcParams` with profile configuration.
 
 
 * **Parameters**
 
-    **reload_mpl** – Whether to reload `matplotlib` and `pyplot` modules
+    **reload_mpl** (*bool*) – Whether to reload `matplotlib` and `pyplot` modules
     before applying the configuration. Reloading is necessary for
     fonts to be updated.
 
@@ -66,7 +74,7 @@ Context manager for `config` method.
 
 * **Parameters**
 
-    **reload_mpl** – Whether to first reload `matplotlib` and `pyplot` modules.
+    **reload_mpl** (*bool*) – Whether to first reload `matplotlib` and `pyplot` modules.
 
 
 ### Examples
@@ -85,692 +93,240 @@ black
 
 
 ### _class_ shplot.profiles.ColorProfile(\*\*args)
+Bases: [`ProfileBase`](#shplot.profiles.ProfileBase)
+
 Wrapper for color-related matplotlib params.
 
 
-#### palette()
+#### _property_ palette(_: list[str]_ )
 `axes.prop_cycle` colors.
 
 
-* **Type**
-
-    List[str]
-
-
-
-#### fg()
+#### _property_ fg(_: str_ )
 Primary foreground color, used for text, axes lines, ticks, etc.
 
 
-* **Type**
-
-    str
-
-
-
-#### fg_secondary()
+#### _property_ fg_secondary(_: str_ )
 Secondary foreground color, used for grid lines and legend frame.
 
 
-* **Type**
-
-    str
-
-
-
-#### bg()
+#### _property_ bg(_: str_ )
 Axes and figure face color.
 
 
-* **Type**
+#### _property_ grid_alpha(_: float_ )
 
-    str
+#### _property_ legend_frame_alpha(_: float_ )
 
-
-
-#### grid_alpha()
-
-* **Type**
-
-    float
-
-
-
-#### legend_frame_alpha()
-
-* **Type**
-
-    float
-
-
-
-#### transparent()
+#### _property_ transparent(_: bool_ )
 Whether to save figures with transparent background.
 
 
-* **Type**
-
-    bool
-
-
-
 ### _class_ shplot.profiles.FontProfile(\*\*args)
+Bases: [`ProfileBase`](#shplot.profiles.ProfileBase)
+
 Wrapper for font-related matplotlib params.
 
 
-#### family()
+#### _property_ family(_: list[str]_ )
 
-* **Type**
+#### _property_ style(_: Literal['normal', 'italic', 'oblique']_ )
 
-    List[str]
+#### _property_ variant(_: Literal['normal', 'small-caps']_ )
 
+#### _property_ weight(_: Literal['normal', 'bold', '100', '200', '300', '400', '500', '600', '700', '800', '900']_ )
 
+#### _property_ stretch(_: Literal['ultra-condensed', 'extra-condensed', 'condensed', 'semi-condensed', 'normal', 'semi-expanded', 'expanded', 'extra-expanded', 'ultra-expanded', 'wider', 'narrower']_ )
 
-#### style()
+#### _property_ serif(_: list[str]_ )
 
-* **Type**
+#### _property_ sans_serif(_: list[str]_ )
 
-    typing_extensions.Literal[normal, italic, oblique]
+#### _property_ monospace(_: list[str]_ )
 
+#### _property_ cursive(_: list[str]_ )
 
+#### _property_ fantasy(_: list[str]_ )
 
-#### variant()
+#### _property_ text_usetex(_: bool_ )
 
-* **Type**
+#### _property_ latex_preamble(_: list[str]_ )
 
-    typing_extensions.Literal[normal, small-caps]
+#### _property_ math_fontset(_: Literal['dejavusans', 'dejavuserif', 'cm', 'stix', 'stixsans', 'custom']_ )
 
+#### _property_ custom_math_rm(_: str_ )
 
+#### _property_ custom_math_sf(_: str_ )
 
-#### weight()
+#### _property_ custom_math_tt(_: str_ )
 
-* **Type**
+#### _property_ custom_math_it(_: str_ )
 
-    typing_extensions.Literal[normal, bold, 100, 200, 300, 400, 500, 600, 700, 800, 900]
+#### _property_ custom_math_bf(_: str_ )
 
+#### _property_ custom_math_cal(_: str_ )
 
+#### _property_ math_fallback(_: Literal['cm', 'stix', 'stixsans', 'None']_ )
 
-#### stretch()
+#### _property_ math_default(_: Literal['rm', 'cal', 'it', 'tt', 'sf', 'bf', 'default', 'bb', 'frak', 'scr', 'regular']_ )
 
-* **Type**
+#### _property_ pgf_rcfonts(_: bool_ )
 
-    typing_extensions.Literal[ultra-condensed, extra-condensed, condensed, semi-condensed, normal, semi-expanded, expanded, extra-expanded, ultra-expanded, wider, narrower]
-
-
-
-#### serif()
-
-* **Type**
-
-    List[str]
-
-
-
-#### sans_serif()
-
-* **Type**
-
-    List[str]
-
-
-
-#### monospace()
-
-* **Type**
-
-    List[str]
-
-
-
-#### cursive()
-
-* **Type**
-
-    List[str]
-
-
-
-#### fantasy()
-
-* **Type**
-
-    List[str]
-
-
-
-#### text_usetex()
-
-* **Type**
-
-    bool
-
-
-
-#### latex_preamble()
-
-* **Type**
-
-    List[str]
-
-
-
-#### math_fontset()
-
-* **Type**
-
-    typing_extensions.Literal[dejavusans, dejavuserif, cm, stix, stixsans, custom]
-
-
-
-#### custom_math_rm()
-
-* **Type**
-
-    str
-
-
-
-#### custom_math_sf()
-
-* **Type**
-
-    str
-
-
-
-#### custom_math_tt()
-
-* **Type**
-
-    str
-
-
-
-#### custom_math_it()
-
-* **Type**
-
-    str
-
-
-
-#### custom_math_bf()
-
-* **Type**
-
-    str
-
-
-
-#### custom_math_cal()
-
-* **Type**
-
-    str
-
-
-
-#### math_fallback()
-
-* **Type**
-
-    typing_extensions.Literal[cm, stix, stixsans, None]
-
-
-
-#### math_default()
-
-* **Type**
-
-    typing_extensions.Literal[rm, cal, it, tt, sf, bf, default, bb, frak, scr, regular]
-
-
-
-#### pgf_rcfonts()
-
-* **Type**
-
-    bool
-
-
-
-#### set_pgf_preamble()
+#### _property_ set_pgf_preamble(_: bool_ )
 Whether to set `pgf.preamble` using `latex_preamble`.
 
 
-* **Type**
-
-    bool
-
-
-
 ### _class_ shplot.profiles.PlotScaleProfile(\*\*args)
+Bases: [`ProfileBase`](#shplot.profiles.ProfileBase)
+
 Wrapper for plot scale-related matplotlib params.
 
 
-#### font_size()
-
-* **Type**
-
-    float
-
-
-
-#### axes_title_size()
-
-* **Type**
-
-    [shplot.profiles._interface.PlotScaleProfile.FloatOrStr](#shplot.profiles.PlotScaleProfile.FloatOrStr)
-
-
-
-#### axes_label_size()
-
-* **Type**
-
-    [shplot.profiles._interface.PlotScaleProfile.FloatOrStr](#shplot.profiles.PlotScaleProfile.FloatOrStr)
-
-
-
-#### xtick_label_size()
-
-* **Type**
-
-    [shplot.profiles._interface.PlotScaleProfile.FloatOrStr](#shplot.profiles.PlotScaleProfile.FloatOrStr)
-
-
-
-#### ytick_label_size()
-
-* **Type**
-
-    [shplot.profiles._interface.PlotScaleProfile.FloatOrStr](#shplot.profiles.PlotScaleProfile.FloatOrStr)
-
-
-
-#### legend_font_size()
-
-* **Type**
-
-    [shplot.profiles._interface.PlotScaleProfile.FloatOrStr](#shplot.profiles.PlotScaleProfile.FloatOrStr)
-
-
-
-#### legend_title_size()
-
-* **Type**
-
-    [shplot.profiles._interface.PlotScaleProfile.FloatOrStr](#shplot.profiles.PlotScaleProfile.FloatOrStr)
-
-
-
-#### figure_title_size()
-
-* **Type**
-
-    [shplot.profiles._interface.PlotScaleProfile.FloatOrStr](#shplot.profiles.PlotScaleProfile.FloatOrStr)
-
-
-
-#### figure_label_size()
-
-* **Type**
-
-    [shplot.profiles._interface.PlotScaleProfile.FloatOrStr](#shplot.profiles.PlotScaleProfile.FloatOrStr)
-
-
-
-#### marker_size()
-
-* **Type**
-
-    float
-
-
-
-#### line_width()
-
-* **Type**
-
-    float
-
-
-
-#### full_width_in()
-Default figure width in inches.
-
-
-* **Type**
-
-    float
-
-
-
-#### default_aspect_wh()
-Default figure aspect ratio (width/height).
-
-
-* **Type**
-
-    float
-
-
-
-#### legend_marker_scale()
-
-* **Type**
-
-    float
-
-
-
-#### subplot_left()
-
-* **Type**
-
-    float
-
-
-
-#### subplot_right()
-
-* **Type**
-
-    float
-
-
-
-#### subplot_bottom()
-
-* **Type**
-
-    float
-
-
-
-#### subplot_top()
-
-* **Type**
-
-    float
-
-
-
-#### subplot_hspace()
-
-* **Type**
-
-    float
-
-
-
-#### subplot_wspace()
-
-* **Type**
-
-    float
-
-
-
-#### autolayout()
-
-* **Type**
-
-    bool
-
-
-
-#### constrained_layout()
-
-* **Type**
-
-    bool
-
-
-
-#### constrained_layout_hspace()
-
-* **Type**
-
-    float
-
-
-
-#### constrained_layout_wspace()
-
-* **Type**
-
-    float
-
-
-
 #### _class_ FloatOrStr()
+Bases: `ABC`
+
 Float or string type.
 
 
+#### _property_ font_size(_: float_ )
+
+#### _property_ axes_title_size(_: [FloatOrStr](#shplot.profiles.PlotScaleProfile.FloatOrStr)_ )
+
+#### _property_ axes_label_size(_: [FloatOrStr](#shplot.profiles.PlotScaleProfile.FloatOrStr)_ )
+
+#### _property_ xtick_label_size(_: [FloatOrStr](#shplot.profiles.PlotScaleProfile.FloatOrStr)_ )
+
+#### _property_ ytick_label_size(_: [FloatOrStr](#shplot.profiles.PlotScaleProfile.FloatOrStr)_ )
+
+#### _property_ legend_font_size(_: [FloatOrStr](#shplot.profiles.PlotScaleProfile.FloatOrStr)_ )
+
+#### _property_ legend_title_size(_: [FloatOrStr](#shplot.profiles.PlotScaleProfile.FloatOrStr)_ )
+
+#### _property_ figure_title_size(_: [FloatOrStr](#shplot.profiles.PlotScaleProfile.FloatOrStr)_ )
+
+#### _property_ figure_label_size(_: [FloatOrStr](#shplot.profiles.PlotScaleProfile.FloatOrStr)_ )
+
+#### _property_ marker_size(_: float_ )
+
+#### _property_ line_width(_: float_ )
+
+#### _property_ full_width_in(_: float_ )
+Default figure width in inches.
+
+
+#### _property_ default_aspect_wh(_: float_ )
+Default figure aspect ratio (width/height).
+
+
+#### _property_ legend_marker_scale(_: float_ )
+
+#### _property_ subplot_left(_: float_ )
+
+#### _property_ subplot_right(_: float_ )
+
+#### _property_ subplot_bottom(_: float_ )
+
+#### _property_ subplot_top(_: float_ )
+
+#### _property_ subplot_hspace(_: float_ )
+
+#### _property_ subplot_wspace(_: float_ )
+
+#### _property_ autolayout(_: bool_ )
+
+#### _property_ constrained_layout(_: bool_ )
+
+#### _property_ constrained_layout_hspace(_: float_ )
+
+#### _property_ constrained_layout_wspace(_: float_ )
+
 ### _class_ shplot.profiles.AxesProfile(\*\*args)
+Bases: [`ProfileBase`](#shplot.profiles.ProfileBase)
+
 Wrapper for axes-related matplotlib params.
 
 
-#### grid_axes()
-Which axes to draw grid lines on.
+#### _property_ grid_axes(_: Literal['x', 'y', 'both', 'none']_ )
+which axes to draw grid lines on
 
 
-* **Type**
+#### _property_ grid_lines(_: Literal['major', 'minor', 'both']_ )
+which grid lines to draw
 
-    typing_extensions.Literal[x, y, both, none]
 
+#### _property_ spines(_: set[Literal['left', 'right', 'bottom', 'top']]_ )
+which sides to draw spines on
 
 
-#### grid_lines()
-Which grid lines to draw.
+#### _property_ axis_below(_: Literal['all', 'line', 'none']_ )
+where to draw axis grid lines and ticks
 
 
-* **Type**
+#### _property_ xticks_top(_: Literal['none', 'major', 'both']_ )
+which tick lines to draw on the top x-axis
 
-    typing_extensions.Literal[major, minor, both]
 
+#### _property_ xticks_bottom(_: Literal['none', 'major', 'both']_ )
+which tick lines to draw on the bottom x-axis
 
 
-#### spines()
-Which sides to draw spines on.
+#### _property_ xlabels_top(_: bool_ )
+whether to show labels on the top x-axis
 
 
-* **Type**
+#### _property_ xlabels_bottom(_: bool_ )
+whether to show labels on the bottom x-axis
 
-    Set[typing_extensions.Literal[left, right, bottom, top]]
 
+#### _property_ xtick_direction(_: Literal['in', 'out', 'inout']_ )
+direction of x-axis ticks
 
 
-#### axis_below()
-Where to draw axis grid lines and ticks.
+#### _property_ xtick_alignment(_: Literal['left', 'center', 'right']_ )
+alignment of x-axis tick labels
 
 
-* **Type**
+#### _property_ xlabel_position(_: Literal['left', 'center', 'right']_ )
+position of x-axis label
 
-    typing_extensions.Literal[all, line, none]
 
+#### _property_ yticks_left(_: Literal['none', 'major', 'both']_ )
+which tick lines to draw on the left y-axis
 
 
-#### xticks_top()
-Which tick lines to draw on the top x-axis.
+#### _property_ yticks_right(_: Literal['none', 'major', 'both']_ )
+which tick lines to draw on the right y-axis
 
 
-* **Type**
+#### _property_ ylabels_left(_: bool_ )
+whether to show labels on the left y-axis
 
-    typing_extensions.Literal[none, major, both]
 
+#### _property_ ylabels_right(_: bool_ )
+whether to show labels on the right y-axis
 
 
-#### xticks_bottom()
-Which tick lines to draw on the bottom x-axis.
+#### _property_ ytick_direction(_: Literal['in', 'out', 'inout']_ )
+direction of y-axis ticks
 
 
-* **Type**
+#### _property_ ytick_alignment(_: Literal['bottom', 'center', 'top', 'baseline', 'center_baseline']_ )
+alignment of y-axis tick labels
 
-    typing_extensions.Literal[none, major, both]
 
-
-
-#### xlabels_top()
-Whether to show labels on the top x-axis.
-
-
-* **Type**
-
-    bool
-
-
-
-#### xlabels_bottom()
-Whether to show labels on the bottom x-axis.
-
-
-* **Type**
-
-    bool
-
-
-
-#### xtick_direction()
-Direction of x-axis ticks.
-
-
-* **Type**
-
-    typing_extensions.Literal[in, out, inout]
-
-
-
-#### xtick_alignment()
-Alignment of x-axis tick labels.
-
-
-* **Type**
-
-    typing_extensions.Literal[left, center, right]
-
-
-
-#### xlabel_position()
-Position of x-axis label.
-
-
-* **Type**
-
-    typing_extensions.Literal[left, center, right]
-
-
-
-#### yticks_left()
-Which tick lines to draw on the left y-axis.
-
-
-* **Type**
-
-    typing_extensions.Literal[none, major, both]
-
-
-
-#### yticks_right()
-Which tick lines to draw on the right y-axis.
-
-
-* **Type**
-
-    typing_extensions.Literal[none, major, both]
-
-
-
-#### ylabels_left()
-Whether to show labels on the left y-axis.
-
-
-* **Type**
-
-    bool
-
-
-
-#### ylabels_right()
-Whether to show labels on the right y-axis.
-
-
-* **Type**
-
-    bool
-
-
-
-#### ytick_direction()
-Direction of y-axis ticks.
-
-
-* **Type**
-
-    typing_extensions.Literal[in, out, inout]
-
-
-
-#### ytick_alignment()
-Alignment of y-axis tick labels.
-
-
-* **Type**
-
-    typing_extensions.Literal[bottom, center, top, baseline, center_baseline]
-
-
-
-#### ylabel_position()
-Position of y-axis label.
-
-
-* **Type**
-
-    typing_extensions.Literal[bottom, center, top]
-
+#### _property_ ylabel_position(_: Literal['bottom', 'center', 'top']_ )
+position of y-axis labels
 
 
 ### _class_ shplot.profiles.PlottingProfile(\*\*kwargs)
+Bases: [`ProfileBase`](#shplot.profiles.ProfileBase)
+
 Wrapper for color, font, scale, and axes profiles.
 
 All arguments for initialization are optional, and must be passed as keyword
 arguments. Arguments other than `color`, `font`, `scale`, and `axes` are used to
 update `matplotlib.rcParams` directly, and will override any values set by
 the profile.
-
-
-#### color()
-
-* **Type**
-
-    [shplot.profiles._interface.ColorProfile](#shplot.profiles.ColorProfile)
-
-
-
-#### font()
-
-* **Type**
-
-    [shplot.profiles._interface.FontProfile](#shplot.profiles.FontProfile)
-
-
-
-#### scale()
-
-* **Type**
-
-    [shplot.profiles._interface.PlotScaleProfile](#shplot.profiles.PlotScaleProfile)
-
-
-
-#### axes()
-
-* **Type**
-
-    [shplot.profiles._interface.AxesProfile](#shplot.profiles.AxesProfile)
-
 
 ### Examples
 
@@ -783,25 +339,15 @@ the profile.
 {'grid.color': 'gray', 'legend.edgecolor': 'darkgray', 'backend': 'Agg'}
 ```
 
+
+#### _property_ color(_: [ColorProfile](#shplot.profiles.ColorProfile)_ )
+
+#### _property_ font(_: [FontProfile](#shplot.profiles.FontProfile)_ )
+
+#### _property_ scale(_: [PlotScaleProfile](#shplot.profiles.PlotScaleProfile)_ )
+
+#### _property_ axes(_: [AxesProfile](#shplot.profiles.AxesProfile)_ )
 ## Submodules
 
 
 * [shplot.profiles.builtin module](shplot.profiles.builtin.md)
-
-
-    * [`SH_BUILTIN_PROFILES`](shplot.profiles.builtin.md#shplot.profiles.builtin.SH_BUILTIN_PROFILES)
-    * [`ShPaperProfile`](shplot.profiles.builtin.md#shplot.profiles.builtin.ShPaperProfile)
-    * [`ShBookProfile`](shplot.profiles.builtin.md#shplot.profiles.builtin.ShBookProfile)
-    * [`ShWebProfile`](shplot.profiles.builtin.md#shplot.profiles.builtin.ShWebProfile)
-    * [`ShPresentationProfile`](shplot.profiles.builtin.md#shplot.profiles.builtin.ShPresentationProfile)
-    * [`CUD_PALETTE`](shplot.profiles.builtin.md#shplot.profiles.builtin.CUD_PALETTE)
-    * [`ShLightCUDProfile`](shplot.profiles.builtin.md#shplot.profiles.builtin.ShLightCUDProfile)
-    * [`BSLightCUDProfile`](shplot.profiles.builtin.md#shplot.profiles.builtin.BSLightCUDProfile)
-    * [`BSDarkCUDProfile`](shplot.profiles.builtin.md#shplot.profiles.builtin.BSDarkCUDProfile)
-    * [`ShScaleProfile`](shplot.profiles.builtin.md#shplot.profiles.builtin.ShScaleProfile)
-    * [`ShPaperScaleProfile`](shplot.profiles.builtin.md#shplot.profiles.builtin.ShPaperScaleProfile)
-    * [`ShBookScaleProfile`](shplot.profiles.builtin.md#shplot.profiles.builtin.ShBookScaleProfile)
-    * [`ShWebScaleProfile`](shplot.profiles.builtin.md#shplot.profiles.builtin.ShWebScaleProfile)
-    * [`ShPresentationScaleProfile`](shplot.profiles.builtin.md#shplot.profiles.builtin.ShPresentationScaleProfile)
-    * [`ShFontsetupFontProfile`](shplot.profiles.builtin.md#shplot.profiles.builtin.ShFontsetupFontProfile)
-    * [`ShPGFRcFontsFontProfile`](shplot.profiles.builtin.md#shplot.profiles.builtin.ShPGFRcFontsFontProfile)

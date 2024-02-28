@@ -3,9 +3,9 @@
 # Generates markdown documentation for each top level package, except `tests`.
 # One file is generated per module, which is put in `docs/`.
 
-SPHINX_APIDOC_OPTIONS='members' \
 poetry run sphinx-apidoc \
     -o docs/_build \
+    -d 1 \
     --module-first \
     --tocfile index \
     --separate \
@@ -16,7 +16,7 @@ poetry run sphinx-build \
     -D extensions=sphinx.ext.autodoc,sphinx.ext.napoleon \
     -D default_role=samp \
     -D autodoc_member_order=bysource \
-    -D autodoc_typehints=none \
+    -D autodoc_typehints=description \
     -D highlight_language=python \
     -b markdown \
     -c docs \

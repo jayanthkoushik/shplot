@@ -12,6 +12,7 @@
     "edgecolor",
     "rcfonts",
     "fontspec",
+    "fontname",
     "normalsize",
     "footnotesize",
     "usetex",
@@ -31,6 +32,22 @@
     "dejavusans",
     "stix",
     "stixsans",
-    "frak"
+    "frak",
+    "olddefault",
+    "ebgaramond",
+    "fira",
+    "gfsartemisia",
+    "gfsdidotclassic",
+    "gfsdidot",
+    "kekris",
+    "libertinus",
+    "lucida",
+    "msgaramond",
+    "neoeuler",
+    "oldstandard",
+    "palatino",
+    "stixtwo",
+    "xcharter",
+    "Corgy"
   ]
 }

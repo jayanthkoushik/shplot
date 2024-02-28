@@ -5,6 +5,7 @@ from importlib import reload
 
 if sys.version_info < (3, 9):
     from typing_extensions import (  # type: ignore
+        Annotated,
         Any,
         Dict,
         List,
@@ -15,7 +16,7 @@ if sys.version_info < (3, 9):
 else:
     List = list
     Set = set
-    from typing import Any, Dict, Literal, Optional
+    from typing import Annotated, Any, Dict, Literal, Optional
 
 import matplotlib as mpl
 from corgy import Corgy, corgychecker, corgyparser
@@ -132,25 +133,19 @@ class ProfileBase(Corgy, corgy_make_slots=False):
 
 
 class ColorProfile(ProfileBase):
-    """Wrapper for color-related matplotlib params.
+    """Wrapper for color-related matplotlib params."""
 
-    Attributes:
-        palette: `axes.prop_cycle` colors.
-        fg: Primary foreground color, used for text, axes lines, ticks, etc.
-        fg_secondary: Secondary foreground color, used for grid lines and legend frame.
-        bg: Axes and figure face color.
-        grid_alpha:
-        legend_frame_alpha:
-        transparent: Whether to save figures with transparent background.
-    """
-
-    palette: List[str]
-    fg: str
-    fg_secondary: str
-    bg: str
+    palette: Annotated[List[str], "`axes.prop_cycle` colors."]
+    fg: Annotated[
+        str, "Primary foreground color, used for text, axes lines, ticks, etc."
+    ]
+    fg_secondary: Annotated[
+        str, "Secondary foreground color, used for grid lines and legend frame."
+    ]
+    bg: Annotated[str, "Axes and figure face color."]
     grid_alpha: float
     legend_frame_alpha: float
-    transparent: bool
+    transparent: Annotated[bool, "Whether to save figures with transparent background."]
 
     def _rc(self) -> Dict[str, Any]:
         rc_dict: Dict[str, Any] = {}
@@ -186,33 +181,7 @@ class ColorProfile(ProfileBase):
 
 
 class FontProfile(ProfileBase):
-    """Wrapper for font-related matplotlib params.
-
-    Attributes:
-        family:
-        style:
-        variant:
-        weight:
-        stretch:
-        serif:
-        sans_serif:
-        monospace:
-        cursive:
-        fantasy:
-        text_usetex:
-        latex_preamble:
-        math_fontset:
-        custom_math_rm:
-        custom_math_sf:
-        custom_math_tt:
-        custom_math_it:
-        custom_math_bf:
-        custom_math_cal:
-        math_fallback:
-        math_default:
-        pgf_rcfonts:
-        set_pgf_preamble: Whether to set `pgf.preamble` using `latex_preamble`.
-    """
+    """Wrapper for font-related matplotlib params."""
 
     family: List[str]
     style: Literal["normal", "italic", "oblique"]
@@ -254,7 +223,9 @@ class FontProfile(ProfileBase):
         "rm", "cal", "it", "tt", "sf", "bf", "default", "bb", "frak", "scr", "regular"
     ]
     pgf_rcfonts: bool
-    set_pgf_preamble: bool = True
+    set_pgf_preamble: Annotated[
+        bool, "Whether to set `pgf.preamble` using `latex_preamble`."
+    ] = True
 
     def _rc(self) -> Dict[str, Any]:
         rc_dict: Dict[str, Any] = {}
@@ -308,34 +279,7 @@ class FontProfile(ProfileBase):
 
 
 class PlotScaleProfile(ProfileBase):
-    """Wrapper for plot scale-related matplotlib params.
-
-    Attributes:
-        font_size:
-        axes_title_size:
-        axes_label_size:
-        xtick_label_size:
-        ytick_label_size:
-        legend_font_size:
-        legend_title_size:
-        figure_title_size:
-        figure_label_size:
-        marker_size:
-        line_width:
-        full_width_in: Default figure width in inches.
-        default_aspect_wh: Default figure aspect ratio (width/height).
-        legend_marker_scale:
-        subplot_left:
-        subplot_right:
-        subplot_bottom:
-        subplot_top:
-        subplot_hspace:
-        subplot_wspace:
-        autolayout:
-        constrained_layout:
-        constrained_layout_hspace:
-        constrained_layout_wspace:
-    """
+    """Wrapper for plot scale-related matplotlib params."""
 
     class FloatOrStr(ABC):
         """Float or string type."""
@@ -356,8 +300,8 @@ class PlotScaleProfile(ProfileBase):
     figure_label_size: FloatOrStr
     marker_size: float
     line_width: float
-    full_width_in: float
-    default_aspect_wh: float
+    full_width_in: Annotated[float, "Default figure width in inches."]
+    default_aspect_wh: Annotated[float, "Default figure aspect ratio (width/height)."]
     legend_marker_scale: float
     subplot_left: float
     subplot_right: float
@@ -510,50 +454,57 @@ class PlotScaleProfile(ProfileBase):
 
 
 class AxesProfile(ProfileBase):
-    """Wrapper for axes-related matplotlib params.
+    """Wrapper for axes-related matplotlib params."""
 
-    Attributes:
-        grid_axes: Which axes to draw grid lines on.
-        grid_lines: Which grid lines to draw.
-        spines: Which sides to draw spines on.
-        axis_below: Where to draw axis grid lines and ticks.
-        xticks_top: Which tick lines to draw on the top x-axis.
-        xticks_bottom: Which tick lines to draw on the bottom x-axis.
-        xlabels_top: Whether to show labels on the top x-axis.
-        xlabels_bottom: Whether to show labels on the bottom x-axis.
-        xtick_direction: Direction of x-axis ticks.
-        xtick_alignment: Alignment of x-axis tick labels.
-        xlabel_position: Position of x-axis label.
-        yticks_left: Which tick lines to draw on the left y-axis.
-        yticks_right: Which tick lines to draw on the right y-axis.
-        ylabels_left: Whether to show labels on the left y-axis.
-        ylabels_right: Whether to show labels on the right y-axis.
-        ytick_direction: Direction of y-axis ticks.
-        ytick_alignment: Alignment of y-axis tick labels.
-        ylabel_position: Position of y-axis label.
-    """
+    grid_axes: Annotated[
+        Literal["x", "y", "both", "none"], "which axes to draw grid lines on"
+    ]
+    grid_lines: Annotated[Literal["major", "minor", "both"], "which grid lines to draw"]
 
-    grid_axes: Literal["x", "y", "both", "none"]
-    grid_lines: Literal["major", "minor", "both"]
+    spines: Annotated[
+        Set[Literal["left", "right", "bottom", "top"]], "which sides to draw spines on"
+    ]
+    axis_below: Annotated[
+        Literal["all", "line", "none"], "where to draw axis grid lines and ticks"
+    ]
 
-    spines: Set[Literal["left", "right", "bottom", "top"]]
-    axis_below: Literal["all", "line", "none"]
+    xticks_top: Annotated[
+        Literal["none", "major", "both"], "which tick lines to draw on the top x-axis"
+    ]
+    xticks_bottom: Annotated[
+        Literal["none", "major", "both"],
+        "which tick lines to draw on the bottom x-axis",
+    ]
+    xlabels_top: Annotated[bool, "whether to show labels on the top x-axis"]
+    xlabels_bottom: Annotated[bool, "whether to show labels on the bottom x-axis"]
+    xtick_direction: Annotated[
+        Literal["in", "out", "inout"], "direction of x-axis ticks"
+    ]
+    xtick_alignment: Annotated[
+        Literal["left", "center", "right"], "alignment of x-axis tick labels"
+    ]
+    xlabel_position: Annotated[
+        Literal["left", "center", "right"], "position of x-axis label"
+    ]
 
-    xticks_top: Literal["none", "major", "both"]
-    xticks_bottom: Literal["none", "major", "both"]
-    xlabels_top: bool
-    xlabels_bottom: bool
-    xtick_direction: Literal["in", "out", "inout"]
-    xtick_alignment: Literal["left", "center", "right"]
-    xlabel_position: Literal["left", "center", "right"]
-
-    yticks_left: Literal["none", "major", "both"]
-    yticks_right: Literal["none", "major", "both"]
-    ylabels_left: bool
-    ylabels_right: bool
-    ytick_direction: Literal["in", "out", "inout"]
-    ytick_alignment: Literal["bottom", "center", "top", "baseline", "center_baseline"]
-    ylabel_position: Literal["bottom", "center", "top"]
+    yticks_left: Annotated[
+        Literal["none", "major", "both"], "which tick lines to draw on the left y-axis"
+    ]
+    yticks_right: Annotated[
+        Literal["none", "major", "both"], "which tick lines to draw on the right y-axis"
+    ]
+    ylabels_left: Annotated[bool, "whether to show labels on the left y-axis"]
+    ylabels_right: Annotated[bool, "whether to show labels on the right y-axis"]
+    ytick_direction: Annotated[
+        Literal["in", "out", "inout"], "direction of y-axis ticks"
+    ]
+    ytick_alignment: Annotated[
+        Literal["bottom", "center", "top", "baseline", "center_baseline"],
+        "alignment of y-axis tick labels",
+    ]
+    ylabel_position: Annotated[
+        Literal["bottom", "center", "top"], "position of y-axis labels"
+    ]
 
     def _rc(self) -> Dict[str, Any]:
         rc_dict: Dict[str, Any] = {}
@@ -633,12 +584,6 @@ class PlottingProfile(ProfileBase):
     arguments. Arguments other than `color`, `font`, `scale`, and `axes` are used to
     update `matplotlib.rcParams` directly, and will override any values set by
     the profile.
-
-    Attributes:
-        color:
-        font:
-        scale:
-        axes:
 
     Examples:
         >>> from shplot.profiles import PlottingProfile, ColorProfile

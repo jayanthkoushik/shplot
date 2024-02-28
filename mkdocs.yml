@@ -5,8 +5,8 @@ site_description: "Documentation for Python package 'shplot'."
 site_author: "Jayanth Koushik"
 copyright: "Copyright (c) 2023 Jayanth Koushik"
 
-docs_dir: "docs/www"
-site_dir: "_site"
+docs_dir: "www/src"
+site_dir: "www/_site"
 
 nav:
   - "Home": "index.md"
@@ -23,10 +23,10 @@ plugins:
       handlers:
         python:
           options:
-            show_root_heading: true
-            separate_signature: true
-            show_symbol_type_heading: true
-            show_symbol_type_toc: true
+            show_root_toc_entry: false
+            members_order: source
+            show_if_no_docstring: true
+            show_signature_annotations: true
             show_source: false
 
 markdown_extensions:
