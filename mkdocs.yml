@@ -11,6 +11,7 @@ site_dir: "www/_site"
 nav:
   - "Home": "index.md"
   - "Usage":
+      - "shplot": "usage/shplot.md"
       - "shplot.profiles": "usage/shplot.profiles.md"
       - "shplot.profiles.builtin": "usage/shplot.profiles.builtin.md"
 

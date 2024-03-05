@@ -1,8 +1,12 @@
 from doctest import DocFileSuite
 
+import shplot
 import shplot.profiles
 
-DOCTEST_MODULES = {shplot.profiles: ["builtin.py", "_interface.py"]}
+DOCTEST_MODULES = {
+    shplot: ["_shplot.py"],
+    shplot.profiles: ["builtin.py", "_interface.py"],
+}
 
 
 def load_tests(loader, tests, ignore):
