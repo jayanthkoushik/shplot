@@ -206,12 +206,12 @@ the LaTeX preamble to set `serif/sans-serif/monospace` fonts.
 * **Parameters**
 
 
-    * **family** (*list**[**str**]*) – Default font family.
+    * **family** (*List**[**str**]*) – Default font family.
     * **base_font** (*ShFontsetupFontProfile.FontType*) – One of the fonts supported by `fontsetup`. This value
     is passed as the sole argument to the package.
-    * **serif** (*list**[**str**]*) – Override for serif font. If `None`, `font.serif` from
+    * **serif** (*List**[**str**]*) – Override for serif font. If `None`, `font.serif` from
     `rcParams` will be used.
-    * **sans_serif** (*list**[**str**]*) – Override for sans-serif font. If `None`,
+    * **sans_serif** (*List**[**str**]*) – Override for sans-serif font. If `None`,
     `font.sans-serif` from `rcParams` will be used.
-    * **monospace** (*list**[**str**]*) – Override for monospace font. If `None`,
+    * **monospace** (*List**[**str**]*) – Override for monospace font. If `None`,
     `font.monospace` from `rcParams` will be used.

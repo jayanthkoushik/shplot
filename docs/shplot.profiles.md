@@ -100,7 +100,7 @@ Bases: [`ProfileBase`](#shplot.profiles.ProfileBase)
 Wrapper for color-related matplotlib params.
 
 
-#### _property_ palette(_: list[str]_ )
+#### _property_ palette(_: List[str]_ )
 `axes.prop_cycle` colors.
 
 
@@ -130,7 +130,7 @@ Bases: [`ProfileBase`](#shplot.profiles.ProfileBase)
 Wrapper for font-related matplotlib params.
 
 
-#### _property_ family(_: list[str]_ )
+#### _property_ family(_: List[str]_ )
 
 #### _property_ style(_: Literal['normal', 'italic', 'oblique']_ )
 
@@ -140,19 +140,19 @@ Wrapper for font-related matplotlib params.
 
 #### _property_ stretch(_: Literal['ultra-condensed', 'extra-condensed', 'condensed', 'semi-condensed', 'normal', 'semi-expanded', 'expanded', 'extra-expanded', 'ultra-expanded', 'wider', 'narrower']_ )
 
-#### _property_ serif(_: list[str]_ )
+#### _property_ serif(_: List[str]_ )
 
-#### _property_ sans_serif(_: list[str]_ )
+#### _property_ sans_serif(_: List[str]_ )
 
-#### _property_ monospace(_: list[str]_ )
+#### _property_ monospace(_: List[str]_ )
 
-#### _property_ cursive(_: list[str]_ )
+#### _property_ cursive(_: List[str]_ )
 
-#### _property_ fantasy(_: list[str]_ )
+#### _property_ fantasy(_: List[str]_ )
 
 #### _property_ text_usetex(_: bool_ )
 
-#### _property_ latex_preamble(_: list[str]_ )
+#### _property_ latex_preamble(_: List[str]_ )
 
 #### _property_ math_fontset(_: Literal['dejavusans', 'dejavuserif', 'cm', 'stix', 'stixsans', 'custom']_ )
 
@@ -256,7 +256,7 @@ which axes to draw grid lines on
 which grid lines to draw
 
 
-#### _property_ spines(_: set[Literal['left', 'right', 'bottom', 'top']]_ )
+#### _property_ spines(_: Set[Literal['left', 'right', 'bottom', 'top']]_ )
 which sides to draw spines on
 
 

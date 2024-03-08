@@ -2,21 +2,12 @@ import sys
 from abc import ABC
 from contextlib import contextmanager
 from importlib import reload
+from typing import Any, Dict, List, Optional, Set
 
 if sys.version_info < (3, 9):
-    from typing_extensions import (  # type: ignore
-        Annotated,
-        Any,
-        Dict,
-        List,
-        Literal,
-        Optional,
-        Set,
-    )
+    from typing_extensions import Annotated, Literal
 else:
-    List = list
-    Set = set
-    from typing import Annotated, Any, Dict, Literal, Optional
+    from typing import Annotated, Literal
 
 import matplotlib as mpl
 from corgy import Corgy, corgychecker, corgyparser

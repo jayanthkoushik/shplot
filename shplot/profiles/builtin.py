@@ -1,12 +1,6 @@
 from __future__ import annotations
 
-import sys
-from typing import Optional, Type, Union
-
-if sys.version_info < (3, 9):
-    from typing_extensions import Callable, Dict, Literal  # type: ignore
-else:
-    from typing import Callable, Dict, Literal
+from typing import Callable, Dict, Literal, Optional, Type, Union
 
 from ._interface import (
     AxesProfile,
