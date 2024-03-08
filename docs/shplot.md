@@ -7,10 +7,11 @@ Bases: `Corgy`
 Wrapper around a `matplotlib` figure.
 
 `ShPlot` represents a single figure, optionally associated with a
-`shplot` built-in profile (`shplot.profiles.builtin.SH_BUILTIN_PROFILES`).
-Public attributes are exposed as properties, and can also be set during
-initialization as keyword only arguments. All attributes are optional; refer
-to their descriptions for details.
+`shplot` built-in profile
+(`shplot.profiles.builtin.SH_BUILTIN_PROFILES`). Public attributes
+are exposed as properties, and can also be set during initialization
+as keyword only arguments. All attributes are optional; refer to
+their descriptions for details.
 
 ### Examples
 
@@ -24,13 +25,13 @@ to their descriptions for details.
 ...         width=3.0,
 ...         aspect=3/2,
 ...     )
-...     fig, ax = shplot.open()  # also activates "paper" profile
+...     fig, ax = shplot.open()  # also activates paper profile
 ...     # plot using (fig, ax)
-...     shplot.close()  # saves plot and restores original matplotlib params
+...     shplot.close()  # saves plot and restores rcParams
 ...     # `ShPlot` can also be used as a context manager.
 ...     with shplot.context() as (fig, ax):
 ...         pass
-...     # `shplot.close` will be called automatically on leaving the context.
+...     # `shplot.close` will be called automatically.
 ```
 
 
@@ -55,7 +56,7 @@ Plot aspect ratio, width/height. When provided as a command line argument, can b
 
 
 #### get_plot_size()
-Get the computed size (width, height) of the plot in inches.
+Get computed size (width, height) of the plot in inches.
 
 
 * **Return type**
@@ -77,7 +78,8 @@ Get the plot save path with added extension.
 #### open(\*\*kwargs)
 Open the plot, and activate the profile if present.
 
-`ValueError` is raised if `open` is called on an already open plot.
+`ValueError` is raised if `open` is called on an already open
+plot.
 
 
 * **Parameters**

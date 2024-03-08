@@ -6,14 +6,14 @@ Bases: `Corgy`
 
 Base class for profiles.
 
-Profile classes are thin wrappers around subsets of `matplotlib` parameters.
-Once instantiated, they can be used to generate a dictionary which can be
-used to update `matplotlib.rcParams`.
+Profile classes are thin wrappers around subsets of `matplotlib`
+parameters. Once instantiated, they can be used to generate a
+dictionary which can be used to update `matplotlib.rcParams`.
 
-Profile classes have a dataclass-like interface. All attributes are exposed
-as properties, and can be set either at initialization (as keyword arguments)
-or later. Unless specified otherwise, attributes directly correspond to
-`matplotlib` parameters with the same name.
+Profile classes have a dataclass-like interface. All attributes are
+exposed as properties, and can be set either at initialization (as
+keyword arguments) or later. Unless specified otherwise, attributes
+directly correspond to `matplotlib` parameters with the same name.
 
 ### Examples
 
@@ -27,15 +27,16 @@ or later. Unless specified otherwise, attributes directly correspond to
 ```python
 >>> profile.grid_alpha = 0.5
 >>> profile.rc()
-{'grid.color': 'gray', 'legend.edgecolor': 'gray', 'grid.alpha': 0.5}
+{'grid.color': 'gray', 'legend.edgecolor': 'gray',
+'grid.alpha': 0.5}
 ```
 
 
 #### rc()
-Return profile configuration as a `dict` of matplotlib `rcParams`.
+Return profile configuration as a `dict` of `rcParams`.
 
-Unset attributes are not included in the returned dictionary so that
-different profiles can be combined together.
+Unset attributes are not included in the returned dictionary so
+that different profiles can be combined together.
 
 
 * **Return type**
@@ -50,9 +51,9 @@ Update `matplotlib.rcParams` with profile configuration.
 
 * **Parameters**
 
-    **reload_mpl** (*bool*) – Whether to reload `matplotlib` and `pyplot` modules
-    before applying the configuration. Reloading is necessary for
-    fonts to be updated.
+    **reload_mpl** (*bool*) – Whether to reload `matplotlib` and `pyplot`
+    modules before applying the configuration. Reloading is
+    necessary for fonts to be updated.
 
 
 ### Examples
@@ -74,7 +75,8 @@ Context manager for `config` method.
 
 * **Parameters**
 
-    **reload_mpl** (*bool*) – Whether to first reload `matplotlib` and `pyplot` modules.
+    **reload_mpl** (*bool*) – Whether to first reload `matplotlib` and
+    `pyplot` modules.
 
 
 ### Examples
@@ -323,20 +325,21 @@ Bases: [`ProfileBase`](#shplot.profiles.ProfileBase)
 
 Wrapper for color, font, scale, and axes profiles.
 
-All arguments for initialization are optional, and must be passed as keyword
-arguments. Arguments other than `color`, `font`, `scale`, and `axes` are used to
-update `matplotlib.rcParams` directly, and will override any values set by
-the profile.
+All arguments for initialization are optional, and must be passed as
+keyword arguments. Arguments other than `color`, `font`, `scale`,
+and `axes` are used to update `matplotlib.rcParams` directly, and
+will override any values set by the profile.
 
 ### Examples
 
 ```python
 >>> from shplot.profiles import PlottingProfile, ColorProfile
 >>> color_profile = ColorProfile(fg_secondary="gray")
->>> rc_extra = {"backend": "Agg", "legend.edgecolor": "darkgray"}
+>>> rc_extra = {"backend": "Agg", "legend.edgecolor": "black"}
 >>> profile = PlottingProfile(color=color_profile, **rc_extra)
 >>> profile.rc()
-{'grid.color': 'gray', 'legend.edgecolor': 'darkgray', 'backend': 'Agg'}
+{'grid.color': 'gray', 'legend.edgecolor': 'black',
+'backend': 'Agg'}
 ```
 
 

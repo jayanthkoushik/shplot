@@ -24,10 +24,11 @@ class ShPlot(Corgy):
     """Wrapper around a `matplotlib` figure.
 
     `ShPlot` represents a single figure, optionally associated with a
-    `shplot` built-in profile (`shplot.profiles.builtin.SH_BUILTIN_PROFILES`).
-    Public attributes are exposed as properties, and can also be set during
-    initialization as keyword only arguments. All attributes are optional; refer
-    to their descriptions for details.
+    `shplot` built-in profile
+    (`shplot.profiles.builtin.SH_BUILTIN_PROFILES`). Public attributes
+    are exposed as properties, and can also be set during initialization
+    as keyword only arguments. All attributes are optional; refer to
+    their descriptions for details.
 
     Examples:
         >>> from tempfile import NamedTemporaryFile
@@ -39,13 +40,13 @@ class ShPlot(Corgy):
         ...         width=3.0,
         ...         aspect=3/2,
         ...     )
-        ...     fig, ax = shplot.open()  # also activates "paper" profile
+        ...     fig, ax = shplot.open()  # also activates paper profile
         ...     # plot using (fig, ax)
-        ...     shplot.close()  # saves plot and restores original matplotlib params
+        ...     shplot.close()  # saves plot and restores rcParams
         ...     # `ShPlot` can also be used as a context manager.
         ...     with shplot.context() as (fig, ax):
         ...         pass
-        ...     # `shplot.close` will be called automatically on leaving the context.
+        ...     # `shplot.close` will be called automatically.
 
     """
 
@@ -108,7 +109,7 @@ class ShPlot(Corgy):
             raise ValueError("expected positive value")
 
     def get_plot_size(self) -> Tuple[float, float]:
-        """Get the computed size (width, height) of the plot in inches."""
+        """Get computed size (width, height) of the plot in inches."""
         cfg_width, cfg_height = mpl.rcParams["figure.figsize"]
 
         plot_width: float
@@ -143,7 +144,8 @@ class ShPlot(Corgy):
     def open(self, **kwargs) -> Tuple[Figure, Axes]:
         """Open the plot, and activate the profile if present.
 
-        `ValueError` is raised if `open` is called on an already open plot.
+        `ValueError` is raised if `open` is called on an already open
+        plot.
 
         Args:
             **kwargs: passed to `matplotlib.pyplot.subplots`.

@@ -21,7 +21,7 @@ else:
 import matplotlib as mpl
 from corgy import Corgy, corgychecker, corgyparser
 from cycler import cycler
-from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt  # noqa
 
 __all__ = [
     "ProfileBase",
@@ -36,14 +36,14 @@ __all__ = [
 class ProfileBase(Corgy, corgy_make_slots=False):
     """Base class for profiles.
 
-    Profile classes are thin wrappers around subsets of `matplotlib` parameters.
-    Once instantiated, they can be used to generate a dictionary which can be
-    used to update `matplotlib.rcParams`.
+    Profile classes are thin wrappers around subsets of `matplotlib`
+    parameters. Once instantiated, they can be used to generate a
+    dictionary which can be used to update `matplotlib.rcParams`.
 
-    Profile classes have a dataclass-like interface. All attributes are exposed
-    as properties, and can be set either at initialization (as keyword arguments)
-    or later. Unless specified otherwise, attributes directly correspond to
-    `matplotlib` parameters with the same name.
+    Profile classes have a dataclass-like interface. All attributes are
+    exposed as properties, and can be set either at initialization (as
+    keyword arguments) or later. Unless specified otherwise, attributes
+    directly correspond to `matplotlib` parameters with the same name.
 
     Examples:
         >>> from shplot.profiles import ColorProfile
@@ -52,8 +52,9 @@ class ProfileBase(Corgy, corgy_make_slots=False):
         {'grid.color': 'gray', 'legend.edgecolor': 'gray'}
 
         >>> profile.grid_alpha = 0.5
-        >>> profile.rc()
-        {'grid.color': 'gray', 'legend.edgecolor': 'gray', 'grid.alpha': 0.5}
+        >>> profile.rc()  # doctest: +NORMALIZE_WHITESPACE
+        {'grid.color': 'gray', 'legend.edgecolor': 'gray',
+        'grid.alpha': 0.5}
 
     """
 
@@ -63,10 +64,10 @@ class ProfileBase(Corgy, corgy_make_slots=False):
         return hasattr(self, attr)
 
     def rc(self) -> Dict[str, Any]:
-        """Return profile configuration as a `dict` of matplotlib `rcParams`.
+        """Return profile configuration as a `dict` of `rcParams`.
 
-        Unset attributes are not included in the returned dictionary so that
-        different profiles can be combined together.
+        Unset attributes are not included in the returned dictionary so
+        that different profiles can be combined together.
         """
         return self._rc()
 
@@ -77,9 +78,9 @@ class ProfileBase(Corgy, corgy_make_slots=False):
         """Update `matplotlib.rcParams` with profile configuration.
 
         Args:
-            reload_mpl: Whether to reload `matplotlib` and `pyplot` modules
-                before applying the configuration. Reloading is necessary for
-                fonts to be updated.
+            reload_mpl: Whether to reload `matplotlib` and `pyplot`
+                modules before applying the configuration. Reloading is
+                necessary for fonts to be updated.
 
         Examples:
             >>> import matplotlib as mpl
@@ -99,7 +100,8 @@ class ProfileBase(Corgy, corgy_make_slots=False):
         """Context manager for `config` method.
 
         Args:
-            reload_mpl: Whether to first reload `matplotlib` and `pyplot` modules.
+            reload_mpl: Whether to first reload `matplotlib` and
+                `pyplot` modules.
 
         Examples:
             >>> mpl.rcParams["grid.color"] = 'black'
@@ -580,18 +582,19 @@ class AxesProfile(ProfileBase):
 class PlottingProfile(ProfileBase):
     """Wrapper for color, font, scale, and axes profiles.
 
-    All arguments for initialization are optional, and must be passed as keyword
-    arguments. Arguments other than `color`, `font`, `scale`, and `axes` are used to
-    update `matplotlib.rcParams` directly, and will override any values set by
-    the profile.
+    All arguments for initialization are optional, and must be passed as
+    keyword arguments. Arguments other than `color`, `font`, `scale`,
+    and `axes` are used to update `matplotlib.rcParams` directly, and
+    will override any values set by the profile.
 
     Examples:
         >>> from shplot.profiles import PlottingProfile, ColorProfile
         >>> color_profile = ColorProfile(fg_secondary="gray")
-        >>> rc_extra = {"backend": "Agg", "legend.edgecolor": "darkgray"}
+        >>> rc_extra = {"backend": "Agg", "legend.edgecolor": "black"}
         >>> profile = PlottingProfile(color=color_profile, **rc_extra)
-        >>> profile.rc()
-        {'grid.color': 'gray', 'legend.edgecolor': 'darkgray', 'backend': 'Agg'}
+        >>> profile.rc()  # doctest: +NORMALIZE_WHITESPACE
+        {'grid.color': 'gray', 'legend.edgecolor': 'black',
+        'backend': 'Agg'}
 
     """
 

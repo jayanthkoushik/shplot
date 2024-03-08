@@ -42,15 +42,16 @@ Profile for generating figures for the web.
 * **Parameters**
 
 
-    * **theme** (*Literal**[**'light'**, **'dark'**]*) – Color theme–‘light’ will generate figures on a light background,
-    and ‘dark’ will generate figures on a dark background.
+    * **theme** (*Literal**[**'light'**, **'dark'**]*) – Color theme–‘light’ will generate figures on a light
+    background, and ‘dark’ will generate figures on a dark
+    background.
     * **font_family** (*Literal**[**'serif'**, **'sans-serif'**, **'monospace'**, **'fantasy'**, **'cursive'**]*) – Default font family.
-    * **sans_serif_font** (*Optional**[**str**]*) – Optional override for the default sans-serif font.
-    * **serif_font** (*Optional**[**str**]*) – Optional override for the default serif font.
-    * **monospace_font** (*Optional**[**str**]*) – Optional override for the default monospace font.
-    * **cursive_font** (*Optional**[**str**]*) – Optional override for the default cursive font.
-    * **fantasy_font** (*Optional**[**str**]*) – Optional override for the default fantasy font.
-    * **math_font** (*Optional**[**Literal**[**'dejavusans'**, **'dejavuserif'**, **'cm'**, **'stix'**, **'stixsans'**]**]*) – Optional override for the default math font.
+    * **sans_serif_font** (*Optional**[**str**]*) – Optional override for default sans-serif font.
+    * **serif_font** (*Optional**[**str**]*) – Optional override for default serif font.
+    * **monospace_font** (*Optional**[**str**]*) – Optional override for default monospace font.
+    * **cursive_font** (*Optional**[**str**]*) – Optional override for default cursive font.
+    * **fantasy_font** (*Optional**[**str**]*) – Optional override for default fantasy font.
+    * **math_font** (*Optional**[**Literal**[**'dejavusans'**, **'dejavuserif'**, **'cm'**, **'stix'**, **'stixsans'**]**]*) – Optional override for default math font.
     * **\*\*rc_extra** – `rcParams` overrides.
 
 
@@ -122,7 +123,8 @@ Bases: [`ShScaleProfile`](#shplot.profiles.builtin.ShScaleProfile)
 
 Scale profile for a 10pt document.
 
-Font sizes correspond to relative LaTeX font sizes for 10pt documents:
+Font sizes correspond to relative LaTeX font sizes for 10pt
+documents:
 
 
 * normalsize: 10pt
@@ -136,7 +138,8 @@ Bases: [`ShScaleProfile`](#shplot.profiles.builtin.ShScaleProfile)
 
 Scale profile for a 12pt document.
 
-Font sizes correspond to relative LaTeX font sizes for 12pt documents:
+Font sizes correspond to relative LaTeX font sizes for 12pt
+documents:
 
 
 * normalsize: 12pt
@@ -158,7 +161,8 @@ Bases: `_ShWebScaleProfile`
 
 Scale profile for presentations.
 
-Sizes are based on a 48px font size, and will be scaled based on dpi.
+Sizes are based on a 48px font size, and will be scaled based on
+dpi.
 
 
 * **Parameters**
@@ -173,8 +177,8 @@ Bases: [`FontProfile`](shplot.profiles.md#shplot.profiles.FontProfile)
 LaTeX font profile using the `fontsetup` package.
 
 See <[https://www.ctan.org/pkg/fontsetup](https://www.ctan.org/pkg/fontsetup)> for details on the package.
-This profile simply sets the latex preamble to load the package with the
-given font.
+This profile simply sets the latex preamble to load the package with
+the given font.
 
 
 * **Parameters**
@@ -195,19 +199,19 @@ LaTeX font profile combining `fontsetup` with system fonts.
 
 This profile loads the `fontsetup` package with the given font as in
 `ShFontsetupFontProfile`, but also sets the `pgf.rcfonts` rcParam to
-`True`, so that `matplotlib` will insert `fontspec` commands into the
-LaTeX preamble to set `serif/sans-serif/monospace` fonts.
+`True`, so that `matplotlib` will insert `fontspec` commands into
+the LaTeX preamble to set `serif/sans-serif/monospace` fonts.
 
 
 * **Parameters**
 
 
     * **family** (*list**[**str**]*) – Default font family.
-    * **base_font** (*ShFontsetupFontProfile.FontType*) – One of the fonts supported by `fontsetup`. This value is
-    passed as the sole argument to the package.
-    * **serif** (*list**[**str**]*) – Override for serif font. If `None`, `font.serif` from `rcParams`
-    will be used.
-    * **sans_serif** (*list**[**str**]*) – Override for sans-serif font. If `None`, `font.sans-serif`
-    from `rcParams` will be used.
-    * **monospace** (*list**[**str**]*) – Override for monospace font. If `None`, `font.monospace`
-    from `rcParams` will be used.
+    * **base_font** (*ShFontsetupFontProfile.FontType*) – One of the fonts supported by `fontsetup`. This value
+    is passed as the sole argument to the package.
+    * **serif** (*list**[**str**]*) – Override for serif font. If `None`, `font.serif` from
+    `rcParams` will be used.
+    * **sans_serif** (*list**[**str**]*) – Override for sans-serif font. If `None`,
+    `font.sans-serif` from `rcParams` will be used.
+    * **monospace** (*list**[**str**]*) – Override for monospace font. If `None`,
+    `font.monospace` from `rcParams` will be used.

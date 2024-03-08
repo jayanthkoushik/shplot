@@ -131,7 +131,8 @@ class ShScaleProfile(PlotScaleProfile):
 class ShPaperScaleProfile(ShScaleProfile):
     r"""Scale profile for a 10pt document.
 
-    Font sizes correspond to relative LaTeX font sizes for 10pt documents:
+    Font sizes correspond to relative LaTeX font sizes for 10pt
+    documents:
 
     - \normalsize: 10pt
     - \small: 9pt
@@ -154,7 +155,8 @@ class ShPaperScaleProfile(ShScaleProfile):
 class ShBookScaleProfile(ShScaleProfile):
     r"""Scale profile for a 12pt document.
 
-    Font sizes correspond to relative LaTeX font sizes for 12pt documents:
+    Font sizes correspond to relative LaTeX font sizes for 12pt
+    documents:
 
     - \normalsize: 12pt
     - \small: 10.95pt
@@ -205,7 +207,8 @@ class ShWebScaleProfile(_ShWebScaleProfile):
 class ShPresentationScaleProfile(_ShWebScaleProfile):
     """Scale profile for presentations.
 
-    Sizes are based on a 48px font size, and will be scaled based on dpi.
+    Sizes are based on a 48px font size, and will be scaled based on
+    dpi.
 
     Args:
         dpi: Scale for converting pixel sizes to points.
@@ -223,8 +226,8 @@ class ShFontsetupFontProfile(FontProfile):
     """LaTeX font profile using the `fontsetup` package.
 
     See <https://www.ctan.org/pkg/fontsetup> for details on the package.
-    This profile simply sets the latex preamble to load the package with the
-    given font.
+    This profile simply sets the latex preamble to load the package with
+    the given font.
 
     Args:
         font: One of the fonts supported by `fontsetup`. This value is
@@ -275,19 +278,19 @@ class ShPGFRcFontsFontProfile(FontProfile):
 
     This profile loads the `fontsetup` package with the given font as in
     `ShFontsetupFontProfile`, but also sets the `pgf.rcfonts` rcParam to
-    `True`, so that `matplotlib` will insert `fontspec` commands into the
-    LaTeX preamble to set `serif/sans-serif/monospace` fonts.
+    `True`, so that `matplotlib` will insert `fontspec` commands into
+    the LaTeX preamble to set `serif/sans-serif/monospace` fonts.
 
     Args:
         family: Default font family.
-        base_font: One of the fonts supported by `fontsetup`. This value is
-            passed as the sole argument to the package.
-        serif: Override for serif font. If `None`, `font.serif` from `rcParams`
-            will be used.
-        sans_serif: Override for sans-serif font. If `None`, `font.sans-serif`
-            from `rcParams` will be used.
-        monospace: Override for monospace font. If `None`, `font.monospace`
-            from `rcParams` will be used.
+        base_font: One of the fonts supported by `fontsetup`. This value
+            is passed as the sole argument to the package.
+        serif: Override for serif font. If `None`, `font.serif` from
+            `rcParams` will be used.
+        sans_serif: Override for sans-serif font. If `None`,
+            `font.sans-serif` from `rcParams` will be used.
+        monospace: Override for monospace font. If `None`,
+            `font.monospace` from `rcParams` will be used.
     """
 
     def __init__(
@@ -457,15 +460,16 @@ class ShWebProfile(PlottingProfile):
     """Profile for generating figures for the web.
 
     Args:
-        theme: Color theme--'light' will generate figures on a light background,
-            and 'dark' will generate figures on a dark background.
+        theme: Color theme--'light' will generate figures on a light
+            background, and 'dark' will generate figures on a dark
+            background.
         font_family: Default font family.
-        sans_serif_font: Optional override for the default sans-serif font.
-        serif_font: Optional override for the default serif font.
-        monospace_font: Optional override for the default monospace font.
-        cursive_font: Optional override for the default cursive font.
-        fantasy_font: Optional override for the default fantasy font.
-        math_font: Optional override for the default math font.
+        sans_serif_font: Optional override for default sans-serif font.
+        serif_font: Optional override for default serif font.
+        monospace_font: Optional override for default monospace font.
+        cursive_font: Optional override for default cursive font.
+        fantasy_font: Optional override for default fantasy font.
+        math_font: Optional override for default math font.
         **rc_extra: `rcParams` overrides.
     """
 
