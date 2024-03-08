@@ -4,7 +4,7 @@
 ### _class_ shplot.ShPlot(\*\*kwargs)
 Bases: `Corgy`
 
-Wrapper for `matplotlib` figure.
+Wrapper around a `matplotlib` figure.
 
 `ShPlot` represents a single figure, optionally associated with a
 `shplot` built-in profile (`shplot.profiles.builtin.SH_BUILTIN_PROFILES`).
@@ -42,12 +42,16 @@ Plot save file (extension will be automatically added if not provided).
 Name of a built-in profile.
 
 
+#### _property_ profile_args(_: KeyValuePairs_ )
+Arguments for the builtin-profile. Refer to the individual profiles for details.
+
+
 #### _property_ width(_: float_ )
 Plot width, in inches (if greater than 1), or as a fraction of the configured plot width (if less than or equal to 1).
 
 
 #### _property_ aspect(_: float_ )
-Plot aspect ratio, width/height. When passed as a command line argument, can be passed as a single number or a ratio in the form `width;height`.
+Plot aspect ratio, width/height. When provided as a command line argument, can be passed as a single number or a ratio in the form `width;height`.
 
 
 #### get_plot_size()

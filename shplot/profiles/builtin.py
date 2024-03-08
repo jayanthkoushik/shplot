@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import sys
-from typing import Optional
+from typing import Optional, Type, Union
 
 if sys.version_info < (3, 9):
     from typing_extensions import Callable, Dict, Literal  # type: ignore
@@ -258,6 +258,11 @@ class ShFontsetupFontProfile(FontProfile):
     ]
 
     def __init__(self, font: FontType = "default"):
+        valid_fonts = self.FontType.__args__  # type: ignore[attr-defined]
+        if font not in valid_fonts:
+            raise ValueError(
+                f"unknown 'fontsetup' font: {font}: available choices: {valid_fonts}"
+            )
         super().__init__(
             family=["serif"],
             latex_preamble=[r"\usepackage[%s]{fontsetup}" % font],
@@ -536,7 +541,7 @@ class ShPresentationProfile(PlottingProfile):
         serif_font: Optional[str] = None,
         sans_serif_font: Optional[str] = None,
         monospace_font: Optional[str] = None,
-        dpi: float = 200.0,
+        dpi: Union[float, str] = 200.0,
         **rc_extra,
     ):
         super().__init__(
@@ -544,23 +549,32 @@ class ShPresentationProfile(PlottingProfile):
             font=ShPGFRcFontsFontProfile(
                 font_family, base_font, serif_font, sans_serif_font, monospace_font
             ),
-            scale=ShPresentationScaleProfile(dpi),
+            scale=ShPresentationScaleProfile(float(dpi)),
             axes=ShPresentationAxesProfile(),
             **{
                 "backend": "pgf",
                 "savefig.format": "png",
-                "figure.dpi": dpi,
+                "figure.dpi": float(dpi),
                 **sh_rc_overrides,
                 **rc_extra,
             },
         )
 
 
+def make_builtin_profile_builder(
+    profile_cls: Type[PlottingProfile], **base_kwargs
+) -> Callable[..., PlottingProfile]:
+    def profile_builder(**kwargs):
+        return profile_cls(**base_kwargs, **kwargs)
+
+    return profile_builder
+
+
 SH_BUILTIN_PROFILES: Dict[str, Callable[..., PlottingProfile]] = {
-    "paper": ShPaperProfile,
-    "book": ShBookProfile,
-    "web_light": lambda **kwargs: ShWebProfile(theme="light", **kwargs),
-    "web_dark": lambda **kwargs: ShWebProfile(theme="dark", **kwargs),
-    "presentation": ShPresentationProfile,
+    "paper": make_builtin_profile_builder(ShPaperProfile),
+    "book": make_builtin_profile_builder(ShBookProfile),
+    "web_light": make_builtin_profile_builder(ShWebProfile, theme="light"),
+    "web_dark": make_builtin_profile_builder(ShWebProfile, theme="dark"),
+    "presentation": make_builtin_profile_builder(ShPresentationProfile),
 }
 """Built-in plotting profiles with set values for different contexts."""

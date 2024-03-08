@@ -1,7 +1,7 @@
 # shplot.profiles.builtin module
 
 
-### shplot.profiles.builtin.SH_BUILTIN_PROFILES(_: Dict[str, Callable[[...], [PlottingProfile](shplot.profiles.md#shplot.profiles.PlottingProfile)]]_ _ = {'book': <class 'shplot.profiles.builtin.ShBookProfile'>, 'paper': <class 'shplot.profiles.builtin.ShPaperProfile'>, 'presentation': <class 'shplot.profiles.builtin.ShPresentationProfile'>, 'web_dark': <function <lambda>>, 'web_light': <function <lambda>>}_ )
+### shplot.profiles.builtin.SH_BUILTIN_PROFILES(_: Dict[str, Callable[[...], [PlottingProfile](shplot.profiles.md#shplot.profiles.PlottingProfile)]]_ _ = {'book': <function make_builtin_profile_builder.<locals>.profile_builder>, 'paper': <function make_builtin_profile_builder.<locals>.profile_builder>, 'presentation': <function make_builtin_profile_builder.<locals>.profile_builder>, 'web_dark': <function make_builtin_profile_builder.<locals>.profile_builder>, 'web_light': <function make_builtin_profile_builder.<locals>.profile_builder>}_ )
 Built-in plotting profiles with set values for different contexts.
 
 
@@ -69,7 +69,7 @@ Profile for generating figures for presentations.
     * **serif_font** (*Optional**[**str**]*) – See `ShPGFRcFontsFontProfile`.
     * **sans_serif_font** (*Optional**[**str**]*) – See `ShPGFRcFontsFontProfile`.
     * **monospace_font** (*Optional**[**str**]*) – See `ShPGFRcFontsFontProfile`.
-    * **dpi** (*float*) – See `ShPresentationScaleProfile`.
+    * **dpi** (*Union**[**float**, **str**]*) – See `ShPresentationScaleProfile`.
     * **\*\*rc_extra** – `rcParams` overrides.
 
 

@@ -10,6 +10,7 @@ else:
 
 import matplotlib as mpl
 from corgy import Corgy, corgychecker, corgyparser
+from corgy.types import KeyValuePairs
 from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
@@ -19,8 +20,8 @@ from .profiles.builtin import SH_BUILTIN_PROFILES
 __all__ = ["ShPlot"]
 
 
-class ShPlot(Corgy, corgy_required_by_default=False):
-    """Wrapper for `matplotlib` figure.
+class ShPlot(Corgy):
+    """Wrapper around a `matplotlib` figure.
 
     `ShPlot` represents a single figure, optionally associated with a
     `shplot` built-in profile (`shplot.profiles.builtin.SH_BUILTIN_PROFILES`).
@@ -56,6 +57,11 @@ class ShPlot(Corgy, corgy_required_by_default=False):
         "Name of a built-in profile.",
         ["--shprofile"],
     ]
+    profile_args: Annotated[
+        KeyValuePairs,
+        "Arguments for the builtin-profile. Refer to the individual "
+        "profiles for details.",
+    ]
     width: Annotated[
         float,
         "Plot width, in inches (if greater than 1), or as a "
@@ -63,7 +69,7 @@ class ShPlot(Corgy, corgy_required_by_default=False):
     ]
     aspect: Annotated[
         float,
-        "Plot aspect ratio, width/height. When passed as a command line "
+        "Plot aspect ratio, width/height. When provided as a command line "
         "argument, can be passed as a single number or a ratio in the form "
         "`width;height`.",
     ]
@@ -71,14 +77,19 @@ class ShPlot(Corgy, corgy_required_by_default=False):
     __slots__ = ("_fig", "_ax", "_profile", "_profile_ctx")
 
     def __init__(self, **kwargs):
+        if "profile_args" in kwargs:
+            if not isinstance(kwargs["profile_args"], KeyValuePairs):
+                kwargs["profile_args"] = KeyValuePairs(kwargs["profile_args"])
         super().__init__(**kwargs)
         self._fig = None
         self._ax = None
         self._profile_ctx = None
-        try:
-            self._profile = SH_BUILTIN_PROFILES[self.builtin_profile_name]()
-        except AttributeError:
+        if not hasattr(self, "builtin_profile_name"):
             self._profile = None
+            return
+
+        profile_args = getattr(self, "profile_args", {})
+        self._profile = SH_BUILTIN_PROFILES[self.builtin_profile_name](**profile_args)
 
     @corgyparser("aspect", metavar="float[;float]")
     @staticmethod
