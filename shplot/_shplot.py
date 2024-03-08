@@ -144,14 +144,14 @@ class ShPlot(Corgy):
     def open(self, **kwargs) -> Tuple[Figure, Axes]:
         """Open the plot, and activate the profile if present.
 
-        `ValueError` is raised if `open` is called on an already open
+        `TypeError` is raised if `open` is called on an already open
         plot.
 
         Args:
             **kwargs: passed to `matplotlib.pyplot.subplots`.
         """
         if self._fig is not None:
-            raise ValueError("plot already open")
+            raise TypeError("plot already open")
         if self._profile is not None:
             self._profile_ctx = self._profile.context()
             self._profile_ctx.__enter__()  # pylint: disable=unnecessary-dunder-call
@@ -162,10 +162,10 @@ class ShPlot(Corgy):
     def close(self):
         """Close the figure.
 
-        `ValueError` is raised if called on an unopened plot.
+        `TypeError` is raised if called on an unopened plot.
         """
         if self._fig is None:
-            raise ValueError("plot not open")
+            raise TypeError("plot not open")
         if (plot_path := self.get_plot_path()) is not None:
             self._fig.savefig(plot_path)
         plt.close(self._fig)

@@ -78,7 +78,7 @@ Get the plot save path with added extension.
 #### open(\*\*kwargs)
 Open the plot, and activate the profile if present.
 
-`ValueError` is raised if `open` is called on an already open
+`TypeError` is raised if `open` is called on an already open
 plot.
 
 
@@ -97,7 +97,7 @@ plot.
 #### close()
 Close the figure.
 
-`ValueError` is raised if called on an unopened plot.
+`TypeError` is raised if called on an unopened plot.
 
 
 #### context(\*\*kwargs)
