@@ -34,6 +34,8 @@ plugins:
             show_source: false
             filters:
               - "!^_"
+          import:
+            - "https://jkoushik.me/corgy/9.2/objects.inv"
 
 markdown_extensions:
   - smarty

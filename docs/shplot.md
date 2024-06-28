@@ -1,1 +1,112 @@
 # shplot package
+
+### *class* shplot.ShPlot(\*\*kwargs)
+
+Bases: `Corgy`
+
+Wrapper around a `matplotlib` figure.
+
+`ShPlot` represents a single figure, optionally associated with a
+built-in profile from
+[SH_BUILTIN_PROFILES][shplot.profiles.builtin.SH_BUILTIN_PROFILES].
+
+`ShPlot` inherits from `Corgy`, which provides a “dataclass” like
+interface. Public attributes are exposed as properties, and can also
+be set during initialization as keyword only arguments. All
+attributes are optional; refer to their descriptions for details.
+Refer to the [Corgy docs][corgy.Corgy] for details on the interface.
+
+### Examples
+
+```pycon
+>>> from tempfile import NamedTemporaryFile
+>>> from shplot import ShPlot
+>>> with NamedTemporaryFile() as save_file:
+...     shplot = ShPlot(
+...         file=save_file.name,
+...         builtin_profile_name="paper",
+...         width=3.0,
+...         aspect=3/2,
+...     )
+...     fig, ax = shplot.open()  # also activates paper profile
+...     # plot using (fig, ax)
+...     shplot.close()  # saves plot and restores rcParams
+...     # `ShPlot` can also be used as a context manager.
+...     with shplot.context() as (fig, ax):
+...         pass
+...     # `shplot.close` will be called automatically.
+```
+
+#### *property* file *: str*
+
+Plot save file (extension will be added if not provided).
+
+#### *property* builtin_profile_name *: Literal['paper', 'book', 'web_light', 'web_dark', 'presentation']*
+
+Name of a built-in profile.
+
+#### *property* profile_args *: KeyValuePairs*
+
+Arguments for the builtin-profile. Refer to the individual profiles for details.
+
+#### *property* width *: float*
+
+Plot width, in inches (if greater than 1), or as a fraction of the configured plot width (if less than or equal to 1).
+
+#### *property* aspect *: float*
+
+Plot aspect ratio, width/height. When provided as a command line argument, can be passed as a single number or a ratio in the form `width;height`.
+
+#### get_plot_size()
+
+Get computed size (width, height) of the plot in inches.
+
+* **Return type:**
+  *Tuple*[float, float]
+
+#### get_plot_path()
+
+Get the plot save path with added extension.
+
+* **Return type:**
+  *Path* | None
+
+#### open(\*\*kwargs)
+
+Open the plot, and activate the profile if present.
+
+`TypeError` is raised if `open` is called on an already open
+plot.
+
+* **Parameters:**
+  **\*\*kwargs** (*Any*) – passed to `matplotlib.pyplot.subplots`.
+* **Return type:**
+  *Tuple*[*Figure*, *Axes*]
+
+#### close()
+
+Close the plot.
+
+`TypeError` is raised if called on an unopened plot.
+
+#### context(\*\*kwargs)
+
+Context manager wrapper which opens and closes the plot.
+
+* **Parameters:**
+  **\*\*kwargs** (*Any*) – passed to `matplotlib.pyplot.subplots`.
+* **Return type:**
+  *Generator*[*Tuple*[*Figure*, *Axes*], None, None]
+
+### Examples
+
+```pycon
+>>> from shplot import ShPlot
+>>> shplot = ShPlot()
+>>> with shplot.context() as (fig, ax):
+...     pass
+```
+
+## Subpackages
+
+* [shplot.profiles package](shplot.profiles.md)

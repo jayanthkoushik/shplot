@@ -235,6 +235,24 @@ test = ["Pillow", "contourpy[test-no-images]", "matplotlib"]
 test-no-images = ["pytest", "pytest-cov", "pytest-xdist", "wurlitzer"]
 
 [[package]]
+name = "corgy"
+version = "9.3.0"
+description = "Elegant data classes"
+optional = false
+python-versions = ">=3.7,<4.0"
+files = [
+    {file = "corgy-9.3.0-py3-none-any.whl", hash = "sha256:edc61324840efd83be66e1990f5f08bbd11cd5025a65e8e74c01141f92ea9fdd"},
+    {file = "corgy-9.3.0.tar.gz", hash = "sha256:7dea41a4cca02294c8688a1a4d8f223be648b4cd3c4b568205ece7b9c34e6159"},
+]
+
+[package.dependencies]
+typing_extensions = {version = ">=4.0,<5.0", markers = "python_version < \"3.11\""}
+
+[package.extras]
+colors = ["crayons (>=0.4.0,<0.5.0)"]
+toml = ["tomli (>=2.0.1,<3.0.0)"]
+
+[[package]]
 name = "cycler"
 version = "0.12.1"
 description = "Composable style cycles"
@@ -1927,4 +1945,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "38dab788f7c293510be6e0aad22872727576ee2aea1bd6ad68980e6fd2769965"
+content-hash = "0afe2f79a2cd54572dd045987939e19c2fbbd4a0482d7820a0c1fabcb1fe0571"
