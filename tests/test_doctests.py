@@ -1,8 +1,12 @@
 from doctest import DocFileSuite
 
 import shplot
+import shplot.profiles
 
-DOCTEST_MODULES = {shplot: []}  # type: ignore
+DOCTEST_MODULES = {
+    shplot: ["_shplot.py"],
+    shplot.profiles: ["_interface.py", "builtin.py"],
+}  # type: ignore
 DOCTEST_FILES = ["../README.md"]
 
 
