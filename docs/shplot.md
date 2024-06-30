@@ -62,7 +62,7 @@ Plot aspect ratio, width/height. When provided as a command line argument, can b
 Get computed size (width, height) of the plot in inches.
 
 * **Return type:**
-  *Tuple*[float, float]
+  tuple[float, float]
 
 #### get_plot_path()
 
@@ -81,7 +81,7 @@ plot.
 * **Parameters:**
   **\*\*kwargs** (*Any*) – passed to `matplotlib.pyplot.subplots`.
 * **Return type:**
-  *Tuple*[*Figure*, *Axes*]
+  tuple[*Figure*, *Axes*]
 
 #### close()
 
@@ -96,7 +96,7 @@ Context manager wrapper which opens and closes the plot.
 * **Parameters:**
   **\*\*kwargs** (*Any*) – passed to `matplotlib.pyplot.subplots`.
 * **Return type:**
-  *Generator*[*Tuple*[*Figure*, *Axes*], None, None]
+  *Generator*[tuple[*Figure*, *Axes*], None, None]
 
 ### Examples
 

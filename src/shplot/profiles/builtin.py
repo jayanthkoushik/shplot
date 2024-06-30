@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Any, Callable, Dict, Literal, Optional, Type, Union
+from collections.abc import Callable
+from typing import Any, Literal, Optional, Union
 
 from ._interface import (
     AxesProfile,
@@ -560,7 +561,7 @@ class ShPresentationProfile(PlottingProfile):
 
 
 def make_builtin_profile_builder(
-    profile_cls: Type[PlottingProfile], **base_kwargs: Any
+    profile_cls: type[PlottingProfile], **base_kwargs: Any
 ) -> Callable[..., PlottingProfile]:
     def profile_builder(**kwargs):
         return profile_cls(**base_kwargs, **kwargs)
@@ -568,7 +569,7 @@ def make_builtin_profile_builder(
     return profile_builder
 
 
-SH_BUILTIN_PROFILES: Dict[str, Callable[..., PlottingProfile]] = {
+SH_BUILTIN_PROFILES: dict[str, Callable[..., PlottingProfile]] = {
     "paper": make_builtin_profile_builder(ShPaperProfile),
     "book": make_builtin_profile_builder(ShBookProfile),
     "web_light": make_builtin_profile_builder(ShWebProfile, theme="light"),

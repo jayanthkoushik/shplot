@@ -1,16 +1,10 @@
 from __future__ import annotations
 
 import contextlib
-import sys
 from abc import ABC
 from contextlib import contextmanager
 from importlib import reload
-from typing import Any, Dict, List, Optional, Set
-
-if sys.version_info < (3, 9):
-    from typing_extensions import Annotated, Literal
-else:
-    from typing import Annotated, Literal
+from typing import Annotated, Any, Literal, Optional
 
 import matplotlib as mpl
 from corgy import Corgy, corgychecker, corgyparser
@@ -58,7 +52,7 @@ class ProfileBase(Corgy, corgy_make_slots=False):
             raise AttributeError(attr)
         return hasattr(self, attr)
 
-    def rc(self) -> Dict[str, Any]:
+    def rc(self) -> dict[str, Any]:
         """Return profile configuration as a `dict` of `rcParams`.
 
         Unset attributes are not included in the returned dictionary so
@@ -66,7 +60,7 @@ class ProfileBase(Corgy, corgy_make_slots=False):
         """
         return self._rc()
 
-    def _rc(self) -> Dict[str, Any]:
+    def _rc(self) -> dict[str, Any]:
         raise NotImplementedError
 
     def config(self, reload_mpl: bool = True):
@@ -117,7 +111,7 @@ class ProfileBase(Corgy, corgy_make_slots=False):
         finally:
             self._restore_rc(reload_mpl, current_rc)
 
-    def _restore_rc(self, reload_mpl: bool = True, rc: Optional[Dict[str, Any]] = None):
+    def _restore_rc(self, reload_mpl: bool = True, rc: Optional[dict[str, Any]] = None):
         global mpl, plt  # noqa
         if reload_mpl:
             mpl = reload(mpl)
@@ -132,7 +126,7 @@ class ProfileBase(Corgy, corgy_make_slots=False):
 class ColorProfile(ProfileBase):
     """Wrapper for color-related matplotlib params."""
 
-    palette: Annotated[List[str], "`axes.prop_cycle` colors."]
+    palette: Annotated[list[str], "`axes.prop_cycle` colors."]
     fg: Annotated[
         str, "Primary foreground color, used for text, axes lines, ticks, etc."
     ]
@@ -144,8 +138,8 @@ class ColorProfile(ProfileBase):
     legend_frame_alpha: float
     transparent: Annotated[bool, "Whether to save figures with transparent background."]
 
-    def _rc(self) -> Dict[str, Any]:
-        rc_dict: Dict[str, Any] = {}
+    def _rc(self) -> dict[str, Any]:
+        rc_dict: dict[str, Any] = {}
         if self._is_attr_set("palette"):
             rc_dict["axes.prop_cycle"] = cycler("color", self.palette)
         if self._is_attr_set("fg"):
@@ -180,7 +174,7 @@ class ColorProfile(ProfileBase):
 class FontProfile(ProfileBase):
     """Wrapper for font-related matplotlib params."""
 
-    family: List[str]
+    family: list[str]
     style: Literal["normal", "italic", "oblique"]
     variant: Literal["normal", "small-caps"]
     weight: Literal[
@@ -199,13 +193,13 @@ class FontProfile(ProfileBase):
         "wider",
         "narrower",
     ]
-    serif: List[str]
-    sans_serif: List[str]
-    monospace: List[str]
-    cursive: List[str]
-    fantasy: List[str]
+    serif: list[str]
+    sans_serif: list[str]
+    monospace: list[str]
+    cursive: list[str]
+    fantasy: list[str]
     text_usetex: bool
-    latex_preamble: List[str]
+    latex_preamble: list[str]
     math_fontset: Literal[
         "dejavusans", "dejavuserif", "cm", "stix", "stixsans", "custom"
     ]
@@ -224,8 +218,8 @@ class FontProfile(ProfileBase):
         bool, "Whether to set `pgf.preamble` using `latex_preamble`."
     ] = True
 
-    def _rc(self) -> Dict[str, Any]:
-        rc_dict: Dict[str, Any] = {}
+    def _rc(self) -> dict[str, Any]:
+        rc_dict: dict[str, Any] = {}
         if self._is_attr_set("family"):
             rc_dict["font.family"] = self.family
         if self._is_attr_set("style"):
@@ -352,8 +346,8 @@ class PlotScaleProfile(ProfileBase):
         PlotScaleProfile._check_maybe_relative_size(val)
         return val
 
-    def _rc(self) -> Dict[str, Any]:
-        rc_dict: Dict[str, Any] = {}
+    def _rc(self) -> dict[str, Any]:
+        rc_dict: dict[str, Any] = {}
         if self._is_attr_set("font_size"):
             small_font_size = self.font_size * 3 / 5
             smaller_font_size = self.font_size * 2 / 5
@@ -459,7 +453,7 @@ class AxesProfile(ProfileBase):
     grid_lines: Annotated[Literal["major", "minor", "both"], "which grid lines to draw"]
 
     spines: Annotated[
-        Set[Literal["left", "right", "bottom", "top"]], "which sides to draw spines on"
+        set[Literal["left", "right", "bottom", "top"]], "which sides to draw spines on"
     ]
     axis_below: Annotated[
         Literal["all", "line", "none"], "where to draw axis grid lines and ticks"
@@ -503,8 +497,8 @@ class AxesProfile(ProfileBase):
         Literal["bottom", "center", "top"], "position of y-axis labels"
     ]
 
-    def _rc(self) -> Dict[str, Any]:
-        rc_dict: Dict[str, Any] = {}
+    def _rc(self) -> dict[str, Any]:
+        rc_dict: dict[str, Any] = {}
 
         if self._is_attr_set("grid_axes") and self.grid_axes == "none":
             rc_dict["axes.grid"] = False
@@ -605,8 +599,8 @@ class PlottingProfile(ProfileBase):
                 del kwargs[attr]
         self._rc_extra = kwargs
 
-    def _rc(self) -> Dict[str, Any]:
-        rc_dict: Dict[str, Any] = {}
+    def _rc(self) -> dict[str, Any]:
+        rc_dict: dict[str, Any] = {}
         if self._is_attr_set("color"):
             rc_dict.update(self.color.rc())
         if self._is_attr_set("font"):

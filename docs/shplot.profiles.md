@@ -39,7 +39,7 @@ Unset attributes are not included in the returned dictionary so
 that different profiles can be combined together.
 
 * **Return type:**
-  *Dict*[str, *Any*]
+  dict[str, *Any*]
 
 #### config(reload_mpl=True)
 
@@ -90,7 +90,7 @@ Bases: [`ProfileBase`](#shplot.profiles.ProfileBase)
 
 Wrapper for color-related matplotlib params.
 
-#### *property* palette *: List[str]*
+#### *property* palette *: list[str]*
 
 `axes.prop_cycle` colors.
 
@@ -120,7 +120,7 @@ Bases: [`ProfileBase`](#shplot.profiles.ProfileBase)
 
 Wrapper for font-related matplotlib params.
 
-#### *property* family *: List[str]*
+#### *property* family *: list[str]*
 
 #### *property* style *: Literal['normal', 'italic', 'oblique']*
 
@@ -130,19 +130,19 @@ Wrapper for font-related matplotlib params.
 
 #### *property* stretch *: Literal['ultra-condensed', 'extra-condensed', 'condensed', 'semi-condensed', 'normal', 'semi-expanded', 'expanded', 'extra-expanded', 'ultra-expanded', 'wider', 'narrower']*
 
-#### *property* serif *: List[str]*
+#### *property* serif *: list[str]*
 
-#### *property* sans_serif *: List[str]*
+#### *property* sans_serif *: list[str]*
 
-#### *property* monospace *: List[str]*
+#### *property* monospace *: list[str]*
 
-#### *property* cursive *: List[str]*
+#### *property* cursive *: list[str]*
 
-#### *property* fantasy *: List[str]*
+#### *property* fantasy *: list[str]*
 
 #### *property* text_usetex *: bool*
 
-#### *property* latex_preamble *: List[str]*
+#### *property* latex_preamble *: list[str]*
 
 #### *property* math_fontset *: Literal['dejavusans', 'dejavuserif', 'cm', 'stix', 'stixsans', 'custom']*
 
@@ -246,7 +246,7 @@ which axes to draw grid lines on
 
 which grid lines to draw
 
-#### *property* spines *: Set[Literal['left', 'right', 'bottom', 'top']]*
+#### *property* spines *: set[Literal['left', 'right', 'bottom', 'top']]*
 
 which sides to draw spines on
 

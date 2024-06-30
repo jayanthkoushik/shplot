@@ -1,14 +1,9 @@
 from __future__ import annotations
 
-import sys
+from collections.abc import Generator
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Generator, Optional, Tuple
-
-if sys.version_info < (3, 9):
-    from typing_extensions import Annotated, Literal
-else:
-    from typing import Annotated, Literal
+from typing import Annotated, Any, Literal, Optional
 
 import matplotlib as mpl
 from corgy import Corgy, corgychecker, corgyparser
@@ -112,7 +107,7 @@ class ShPlot(Corgy):
         if val <= 0:
             raise ValueError("expected positive value")
 
-    def get_plot_size(self) -> Tuple[float, float]:
+    def get_plot_size(self) -> tuple[float, float]:
         """Get computed size (width, height) of the plot in inches."""
         cfg_width, cfg_height = mpl.rcParams["figure.figsize"]
 
@@ -142,7 +137,7 @@ class ShPlot(Corgy):
         except AttributeError:
             return None
 
-    def open(self, **kwargs: Any) -> Tuple[Figure, Axes]:
+    def open(self, **kwargs: Any) -> tuple[Figure, Axes]:
         """Open the plot, and activate the profile if present.
 
         `TypeError` is raised if `open` is called on an already open
@@ -176,7 +171,7 @@ class ShPlot(Corgy):
         self._fig = self._ax = None
 
     @contextmanager
-    def context(self, **kwargs: Any) -> Generator[Tuple[Figure, Axes], None, None]:
+    def context(self, **kwargs: Any) -> Generator[tuple[Figure, Axes], None, None]:
         """Context manager wrapper which opens and closes the plot.
 
         Args:

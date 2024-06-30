@@ -1,6 +1,6 @@
 # shplot.profiles.builtin module
 
-### shplot.profiles.builtin.SH_BUILTIN_PROFILES *: Dict[str, Callable[[...], [PlottingProfile](shplot.profiles.md#shplot.profiles.PlottingProfile)]]* *= {'book': <function make_builtin_profile_builder.<locals>.profile_builder>, 'paper': <function make_builtin_profile_builder.<locals>.profile_builder>, 'presentation': <function make_builtin_profile_builder.<locals>.profile_builder>, 'web_dark': <function make_builtin_profile_builder.<locals>.profile_builder>, 'web_light': <function make_builtin_profile_builder.<locals>.profile_builder>}*
+### shplot.profiles.builtin.SH_BUILTIN_PROFILES *: dict[str, Callable[[...], [PlottingProfile](shplot.profiles.md#shplot.profiles.PlottingProfile)]]* *= {'book': <function make_builtin_profile_builder.<locals>.profile_builder>, 'paper': <function make_builtin_profile_builder.<locals>.profile_builder>, 'presentation': <function make_builtin_profile_builder.<locals>.profile_builder>, 'web_dark': <function make_builtin_profile_builder.<locals>.profile_builder>, 'web_light': <function make_builtin_profile_builder.<locals>.profile_builder>}*
 
 Built-in plotting profiles with set values for different contexts.
 
@@ -175,12 +175,12 @@ This profile loads the `fontsetup` package with the given font as in
 the LaTeX preamble to set `serif/sans-serif/monospace` fonts.
 
 * **Parameters:**
-  * **family** (*List* *[**str* *]*) – Default font family.
+  * **family** (*list* *[**str* *]*) – Default font family.
   * **base_font** (*ShFontsetupFontProfile.FontType*) – One of the fonts supported by `fontsetup`. This value
     is passed as the sole argument to the package.
-  * **serif** (*List* *[**str* *]*) – Override for serif font. If `None`, `font.serif` from
+  * **serif** (*list* *[**str* *]*) – Override for serif font. If `None`, `font.serif` from
     `rcParams` will be used.
-  * **sans_serif** (*List* *[**str* *]*) – Override for sans-serif font. If `None`,
+  * **sans_serif** (*list* *[**str* *]*) – Override for sans-serif font. If `None`,
     `font.sans-serif` from `rcParams` will be used.
-  * **monospace** (*List* *[**str* *]*) – Override for monospace font. If `None`,
+  * **monospace** (*list* *[**str* *]*) – Override for monospace font. If `None`,
     `font.monospace` from `rcParams` will be used.
