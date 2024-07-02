@@ -1,3 +1,4 @@
+from argparse import ArgumentError, ArgumentParser
 from unittest import TestCase
 
 import matplotlib as mpl
@@ -46,6 +47,11 @@ class TestProfileBase(TestCase):
             self.assertEqual(mpl.rcParams["font.size"], 100)
 
         self.assertEqual(mpl.rcParams["font.size"], 10)
+
+    def test_profile_base_is_attr_set_raises_on_bad_attr(self):
+        dummy_profile = self.DummyProfile({})
+        with self.assertRaises(AttributeError):
+            dummy_profile._is_attr_set("foo")
 
 
 class TestColorProfile(TestCase):
@@ -116,7 +122,7 @@ class TestPlotScaleProfile(TestCase):
             subplot_bottom=0.5,
             subplot_top=0.5,
             subplot_hspace=0.25,
-            subplot_vspace=0.25,
+            subplot_wspace=0.25,
             autolayout=True,
             constrained_layout=True,
             constrained_layout_hspace=0.1,
@@ -124,6 +130,26 @@ class TestPlotScaleProfile(TestCase):
         )
         with profile.context():
             pass
+
+    def test_plot_scale_profile_raises_on_bad_size(self):
+        profile = PlotScaleProfile()
+        for val in ["xxx-small", "12"]:
+            with self.subTest(val), self.assertRaises(ValueError):
+                profile.axes_title_size = val
+
+    def test_plot_scale_profile_raises_on_parsing_bad_size(self):
+        parser = ArgumentParser(exit_on_error=False)
+        profile = PlotScaleProfile()
+        profile.add_args_to_parser(parser)
+        parser.parse_args(["--axes-title-size", "xx-small"])
+        with self.assertRaises(ArgumentError):
+            parser.parse_args(["--axes-title-size", "xxx-small"])
+
+    def test_plot_scale_profile_rc_handles_full_width_in_unset(self):
+        profile = PlotScaleProfile(default_aspect_wh=2.0)
+        rc = profile.rc()
+        rc_figsize = rc["figure.figsize"]
+        self.assertEqual(rc_figsize[0] / rc_figsize[1], 2)
 
 
 class TestAxesProfile(TestCase):
@@ -150,6 +176,26 @@ class TestAxesProfile(TestCase):
         )
         with profile.context():
             pass
+
+    def test_axes_scale_profile_sets_minor_ticks_visible_based_on_grid_lines(self):
+        profile = AxesProfile()
+        for grid_lines in ["minor", "both"]:
+            profile.grid_lines = grid_lines
+            rc = profile.rc()
+            with self.subTest(grid_lines):
+                self.assertTrue(rc["xtick.minor.visible"])
+                self.assertTrue(rc["ytick.minor.visible"])
+        profile.grid_lines = "major"
+        rc = profile.rc()
+        with self.subTest("major"):
+            self.assertNotIn("xtick.minor.visible", rc)
+            self.assertNotIn("ytick.minor.visible", rc)
+
+    def test_axes_scale_profile_sets_axixbelow_false_if_axis_below_is_none(self):
+        profile = AxesProfile()
+        profile.axis_below = "none"
+        rc = profile.rc()
+        self.assertFalse(rc["axes.axisbelow"])
 
 
 class TestPlottingProfile(TestCase):

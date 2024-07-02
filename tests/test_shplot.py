@@ -1,4 +1,4 @@
-from argparse import ArgumentParser
+from argparse import ArgumentError, ArgumentParser
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest import TestCase
@@ -63,6 +63,21 @@ class TestShPlot(TestCase):
         ShPlot.add_args_to_parser(parser)
         args_namespace = parser.parse_args(["--aspect", "3.14;2.72"])
         self.assertAlmostEqual(args_namespace.aspect, 3.14 / 2.72)
+
+    def test_shplot_raises_on_parsing_bad_aspect(self):
+        parser = ArgumentParser(exit_on_error=False)
+        ShPlot.add_args_to_parser(parser)
+        with self.assertRaises(ArgumentError):
+            parser.parse_args(["--aspect", "foo"])
+        with self.assertRaises(ArgumentError):
+            parser.parse_args(["--aspect", "1:2"])
+        with self.assertRaises(ArgumentError):
+            parser.parse_args(["--aspect", "1;2;3"])
+
+    def test_shplot_raises_on_setting_bad_aspect(self):
+        shplot = ShPlot()
+        with self.assertRaises(ValueError):
+            shplot.aspect = -1.0
 
     def test_shplot_passes_profile_args_to_profile(self):
         shplot = ShPlot(
