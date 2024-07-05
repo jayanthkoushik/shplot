@@ -71,7 +71,7 @@ Get the plot save path with added extension.
 * **Return type:**
   *Path* | None
 
-#### open(\*\*kwargs)
+#### open(mosaic=None, \*\*kwargs)
 
 Open the plot, and activate the profile if present.
 
@@ -79,9 +79,11 @@ Open the plot, and activate the profile if present.
 plot.
 
 * **Parameters:**
-  **\*\*kwargs** (*Any*) – passed to `matplotlib.pyplot.subplots`.
+  * **mosaic** (*MosaicType*) – If not `None`, plot is opened using
+    `subplot_mosaic` instead of `subplots`.
+  * **\*\*kwargs** (*Any*) – Passed to `subplots` or `subplot_mosaic`.
 * **Return type:**
-  tuple[*Figure*, *Axes*]
+  tuple[Figure, Any]
 
 #### close()
 
@@ -89,14 +91,16 @@ Close the plot.
 
 `TypeError` is raised if called on an unopened plot.
 
-#### context(\*\*kwargs)
+#### context(mosaic=None, \*\*kwargs)
 
 Context manager wrapper which opens and closes the plot.
 
 * **Parameters:**
-  **\*\*kwargs** (*Any*) – passed to `matplotlib.pyplot.subplots`.
+  * **mosaic** (*MosaicType*) – If not `None`, plot is opened using
+    `subplot_mosaic` instead of `subplots`.
+  * **\*\*kwargs** (*Any*) – Passed to `subplots` or `subplot_mosaic`.
 * **Return type:**
-  *Generator*[tuple[*Figure*, *Axes*], None, None]
+  Generator[tuple[Figure, Any], None, None]
 
 ### Examples
 

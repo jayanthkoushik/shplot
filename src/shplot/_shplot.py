@@ -1,20 +1,23 @@
 from __future__ import annotations
 
-from collections.abc import Generator
+from collections.abc import Generator, Hashable
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Annotated, Any, Literal, Optional
+from typing import Annotated, Any, Literal, Optional, TypeVar, Union
 
 import matplotlib as mpl
 from corgy import Corgy, corgychecker, corgyparser
 from corgy.types import KeyValuePairs
 from matplotlib import pyplot as plt
-from matplotlib.axes import Axes
 from matplotlib.figure import Figure
+from matplotlib.typing import HashableList
 
 from .profiles.builtin import SH_BUILTIN_PROFILES
 
 __all__ = ["ShPlot"]
+
+_T = TypeVar("_T")
+MosaicType = Union[str, list[HashableList[_T]], list[HashableList[Hashable]], None]
 
 
 class ShPlot(Corgy):
@@ -137,21 +140,26 @@ class ShPlot(Corgy):
         except AttributeError:
             return None
 
-    def open(self, **kwargs: Any) -> tuple[Figure, Axes]:
+    def open(self, mosaic: MosaicType = None, **kwargs: Any) -> tuple[Figure, Any]:
         """Open the plot, and activate the profile if present.
 
         `TypeError` is raised if `open` is called on an already open
         plot.
 
         Args:
-            **kwargs: passed to `matplotlib.pyplot.subplots`.
+            mosaic: If not `None`, plot is opened using
+                `subplot_mosaic` instead of `subplots`.
+            **kwargs: Passed to `subplots` or `subplot_mosaic`.
         """
         if self._fig is not None:
             raise TypeError("plot already open")
         if self._profile is not None:
             self._profile_ctx = self._profile.context()
             self._profile_ctx.__enter__()
-        self._fig, self._ax = plt.subplots(**kwargs)
+        if mosaic is not None:
+            self._fig, self._ax = plt.subplot_mosaic(mosaic, **kwargs)
+        else:
+            self._fig, self._ax = plt.subplots(**kwargs)
         self._fig.set_size_inches(self.get_plot_size())
         return (self._fig, self._ax)
 
@@ -171,11 +179,15 @@ class ShPlot(Corgy):
         self._fig = self._ax = None
 
     @contextmanager
-    def context(self, **kwargs: Any) -> Generator[tuple[Figure, Axes], None, None]:
+    def context(
+        self, mosaic: MosaicType = None, **kwargs: Any
+    ) -> Generator[tuple[Figure, Any], None, None]:
         """Context manager wrapper which opens and closes the plot.
 
         Args:
-            **kwargs: passed to `matplotlib.pyplot.subplots`.
+            mosaic: If not `None`, plot is opened using
+                `subplot_mosaic` instead of `subplots`.
+            **kwargs: Passed to `subplots` or `subplot_mosaic`.
 
         Examples:
             >>> from shplot import ShPlot
@@ -184,8 +196,9 @@ class ShPlot(Corgy):
             ...     pass
 
         """
-        self.open(**kwargs)
+        self.open(mosaic, **kwargs)
         try:
+            assert self._fig is not None
             yield (self._fig, self._ax)
         finally:
             self.close()

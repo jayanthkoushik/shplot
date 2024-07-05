@@ -19,7 +19,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-matplotlib = "^3.0"
+matplotlib = "^3.3"
 corgy = "^9.2"
 
 [tool.poetry.extras]

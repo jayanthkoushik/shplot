@@ -121,11 +121,25 @@ class TestShPlot(TestCase):
         self.assertIsInstance(open_ret[0], Figure)
         self.assertIsInstance(open_ret[1], Axes)
 
+    def test_shplot_open_makes_mosaic_if_arg_passed(self):
+        shplot = ShPlot()
+        open_ret = shplot.open("AAB\nCDB")
+        self.assertIsInstance(open_ret, tuple)
+        self.assertEqual(len(open_ret), 2)
+        self.assertIsInstance(open_ret[0], Figure)
+        self.assertIsInstance(open_ret[1], dict)
+        self.assertSetEqual(set(open_ret[1].keys()), {"A", "B", "C", "D"})
+
     def test_shplot_open_passes_kwargs_to_subplots_call(self):
         shplot = ShPlot()
         _, ax = shplot.open(nrows=2, ncols=3)
         self.assertIsInstance(ax, np.ndarray)
         self.assertTupleEqual(ax.shape, (2, 3))
+
+    def test_shplot_open_passes_kwargs_to_subplot_mosaic_call(self):
+        shplot = ShPlot()
+        _, ax = shplot.open("AAB\nCDB", empty_sentinel="D")
+        self.assertSetEqual(set(ax.keys()), {"A", "B", "C"})
 
     def test_shplot_raises_on_double_open(self):
         shplot = ShPlot()
