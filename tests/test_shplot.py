@@ -9,7 +9,7 @@ from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 
 from shplot import ShPlot
-from shplot.profiles.builtin import CUD_PALETTE
+from shplot.profiles.builtin import CUD_PALETTE, SH_BUILTIN_PROFILES
 
 
 class TestShPlot(TestCase):
@@ -173,3 +173,10 @@ class TestShPlot(TestCase):
         with shplot.context(nrows=2, ncols=3) as (_, ax):
             self.assertIsInstance(ax, np.ndarray)
             self.assertTupleEqual(ax.shape, (2, 3))
+
+    def test_shplot_builtin_profile_attr_accepts_all_available_values(self):
+        shplot = ShPlot()
+        for builtin_profile_name in SH_BUILTIN_PROFILES:
+            shplot.builtin_profile_name = builtin_profile_name
+        with self.assertRaises(ValueError):
+            shplot.builtin_profile_name = "notaprofile"
