@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "shplot"
-description = "Wrapper for Matplotlib/seaborn."
+description = "Wrapper for Matplotlib."
 authors = ["Jayanth Koushik <mail@jkoushik.me>"]
 version = "0.0.0" # version is managed by `poetry-dynamic-versioning`
 packages = [{ include = "shplot", from = "src" }]

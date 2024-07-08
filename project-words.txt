@@ -18,6 +18,7 @@ pycon
 pyplot
 rcfonts
 shplot
+shprofile
 stix
 stixsans
 stixtwo

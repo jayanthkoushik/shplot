@@ -1,3 +1,3 @@
 # shplot
 
-Wrapper for Matplotlib/seaborn.
+Wrapper for Matplotlib.

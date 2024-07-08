@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import contextlib
+import typing
 from abc import ABC
+from collections.abc import Generator
 from contextlib import contextmanager
 from importlib import reload
 from typing import Annotated, Any, Literal, Optional
@@ -25,14 +27,14 @@ __all__ = [
 class ProfileBase(Corgy, corgy_make_slots=False):
     """Base class for profiles.
 
-    Profile classes are thin wrappers around subsets of `matplotlib`
+    Profile classes are thin wrappers around subsets of Matplotlib
     parameters. Once instantiated, they can be used to generate a
     dictionary, which can be used to update `matplotlib.rcParams`.
 
     Profile classes have a dataclass-like interface. All attributes are
     exposed as properties, and can be set either at initialization (as
     keyword arguments) or later. Unless specified otherwise, attributes
-    directly correspond to `matplotlib` parameters with the same name.
+    directly correspond to Matplotlib parameters with the same name.
 
     Examples:
         >>> from shplot.profiles import ColorProfile
@@ -53,17 +55,19 @@ class ProfileBase(Corgy, corgy_make_slots=False):
         return hasattr(self, attr)
 
     def rc(self) -> dict[str, Any]:
-        """Return profile configuration as a `dict` of `rcParams`.
+        """Get profile configuration.
 
-        Unset attributes are not included in the returned dictionary so
-        that different profiles can be combined together.
+        Returns:
+            Dictionary with `rcParams`. Unset attributes are not
+            included in the returned dictionary so that different
+            profiles can be combined together.
         """
         return self._rc()
 
     def _rc(self) -> dict[str, Any]:
         raise NotImplementedError
 
-    def config(self, reload_mpl: bool = True):
+    def config(self, reload_mpl: bool = True) -> None:
         """Update `matplotlib.rcParams` with profile configuration.
 
         Args:
@@ -85,7 +89,7 @@ class ProfileBase(Corgy, corgy_make_slots=False):
         mpl.rcParams.update(self.rc())
 
     @contextmanager
-    def context(self, reload_mpl: bool = True):
+    def context(self, reload_mpl: bool = True) -> Generator[None, None, None]:
         """Context manager for `config` method.
 
         Args:
@@ -111,7 +115,9 @@ class ProfileBase(Corgy, corgy_make_slots=False):
         finally:
             self._restore_rc(reload_mpl, current_rc)
 
-    def _restore_rc(self, reload_mpl: bool = True, rc: Optional[dict[str, Any]] = None):
+    def _restore_rc(
+        self, reload_mpl: bool = True, rc: Optional[dict[str, Any]] = None
+    ) -> None:
         global mpl, plt  # noqa
         if reload_mpl:
             mpl = reload(mpl)
@@ -124,7 +130,7 @@ class ProfileBase(Corgy, corgy_make_slots=False):
 
 
 class ColorProfile(ProfileBase):
-    """Wrapper for color-related matplotlib params."""
+    """Wrapper for color related Matplotlib params."""
 
     palette: Annotated[list[str], "`axes.prop_cycle` colors."]
     fg: Annotated[
@@ -172,7 +178,7 @@ class ColorProfile(ProfileBase):
 
 
 class FontProfile(ProfileBase):
-    """Wrapper for font-related matplotlib params."""
+    """Wrapper for font related Matplotlib params."""
 
     family: list[str]
     style: Literal["normal", "italic", "oblique"]
@@ -280,7 +286,7 @@ FloatOrStr.register(str)
 
 
 class PlotScaleProfile(ProfileBase):
-    """Wrapper for plot scale-related matplotlib params."""
+    """Wrapper for scale related Matplotlib params."""
 
     font_size: float
     axes_title_size: FloatOrStr
@@ -316,7 +322,7 @@ class PlotScaleProfile(ProfileBase):
     @corgychecker("figure_title_size")
     @corgychecker("figure_label_size")
     @staticmethod
-    def _check_maybe_relative_size(val: FloatOrStr):
+    def _check_maybe_relative_size(val: FloatOrStr) -> None:
         if isinstance(val, float):
             return
         if val in (
@@ -340,11 +346,12 @@ class PlotScaleProfile(ProfileBase):
     @corgyparser("figure_title_size")
     @corgyparser("figure_label_size")
     @staticmethod
-    def _parse_float_or_str(val):
+    def _parse_float_or_str(val: str) -> FloatOrStr:
+        retval: FloatOrStr = typing.cast(FloatOrStr, val)
         with contextlib.suppress(ValueError):
-            val = float(val)
-        PlotScaleProfile._check_maybe_relative_size(val)
-        return val
+            retval = typing.cast(FloatOrStr, float(val))
+        PlotScaleProfile._check_maybe_relative_size(retval)
+        return retval
 
     def _rc(self) -> dict[str, Any]:
         rc_dict: dict[str, Any] = {}
@@ -445,56 +452,59 @@ class PlotScaleProfile(ProfileBase):
 
 
 class AxesProfile(ProfileBase):
-    """Wrapper for axes-related matplotlib params."""
+    """Wrapper for axes related Matplotlib params."""
 
     grid_axes: Annotated[
-        Literal["x", "y", "both", "none"], "which axes to draw grid lines on"
+        Literal["x", "y", "both", "none"], "Which axes to draw grid lines on."
     ]
-    grid_lines: Annotated[Literal["major", "minor", "both"], "which grid lines to draw"]
+    grid_lines: Annotated[
+        Literal["major", "minor", "both"], "Which grid lines to draw."
+    ]
 
     spines: Annotated[
-        set[Literal["left", "right", "bottom", "top"]], "which sides to draw spines on"
+        set[Literal["left", "right", "bottom", "top"]], "Which sides to draw spines on."
     ]
     axis_below: Annotated[
-        Literal["all", "line", "none"], "where to draw axis grid lines and ticks"
+        Literal["all", "line", "none"], "Where to draw axis grid lines and ticks."
     ]
 
     xticks_top: Annotated[
-        Literal["none", "major", "both"], "which tick lines to draw on the top x-axis"
+        Literal["none", "major", "both"], "Which tick lines to draw on the top x-axis."
     ]
     xticks_bottom: Annotated[
         Literal["none", "major", "both"],
-        "which tick lines to draw on the bottom x-axis",
+        "Which tick lines to draw on the bottom x-axis.",
     ]
-    xlabels_top: Annotated[bool, "whether to show labels on the top x-axis"]
-    xlabels_bottom: Annotated[bool, "whether to show labels on the bottom x-axis"]
+    xlabels_top: Annotated[bool, "Whether to show labels on the top x-axis."]
+    xlabels_bottom: Annotated[bool, "Whether to show labels on the bottom x-axis."]
     xtick_direction: Annotated[
-        Literal["in", "out", "inout"], "direction of x-axis ticks"
+        Literal["in", "out", "inout"], "Direction of x-axis ticks."
     ]
     xtick_alignment: Annotated[
-        Literal["left", "center", "right"], "alignment of x-axis tick labels"
+        Literal["left", "center", "right"], "Alignment of x-axis tick labels."
     ]
     xlabel_position: Annotated[
-        Literal["left", "center", "right"], "position of x-axis label"
+        Literal["left", "center", "right"], "Position of x-axis label."
     ]
 
     yticks_left: Annotated[
-        Literal["none", "major", "both"], "which tick lines to draw on the left y-axis"
+        Literal["none", "major", "both"], "Which tick lines to draw on the left y-axis."
     ]
     yticks_right: Annotated[
-        Literal["none", "major", "both"], "which tick lines to draw on the right y-axis"
+        Literal["none", "major", "both"],
+        "Which tick lines to draw on the right y-axis.",
     ]
-    ylabels_left: Annotated[bool, "whether to show labels on the left y-axis"]
-    ylabels_right: Annotated[bool, "whether to show labels on the right y-axis"]
+    ylabels_left: Annotated[bool, "Whether to show labels on the left y-axis."]
+    ylabels_right: Annotated[bool, "Whether to show labels on the right y-axis."]
     ytick_direction: Annotated[
-        Literal["in", "out", "inout"], "direction of y-axis ticks"
+        Literal["in", "out", "inout"], "Direction of y-axis ticks."
     ]
     ytick_alignment: Annotated[
         Literal["bottom", "center", "top", "baseline", "center_baseline"],
-        "alignment of y-axis tick labels",
+        "Alignment of y-axis tick labels.",
     ]
     ylabel_position: Annotated[
-        Literal["bottom", "center", "top"], "position of y-axis labels"
+        Literal["bottom", "center", "top"], "Position of y-axis labels."
     ]
 
     def _rc(self) -> dict[str, Any]:
@@ -592,7 +602,7 @@ class PlottingProfile(ProfileBase):
     scale: PlotScaleProfile
     axes: AxesProfile
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         for attr in self.attrs():
             with contextlib.suppress(KeyError):

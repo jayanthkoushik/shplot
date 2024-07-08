@@ -45,14 +45,15 @@ CUD_PALETTE = [
 ]
 """Color Universal Design (CUD) palette.
 
-This is a color-blindness friendly palette.
-See <https://jfly.uni-koeln.de/color/> for details."""
+This is a palette that is unambiguous to both colorblind and
+non-colorblind people. See <https://jfly.uni-koeln.de/color/> for
+details."""
 
 
 class ShLightCUDProfile(ColorProfile):
     """Black on white color profile with CUD palette."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             palette=CUD_PALETTE, fg="#000000", bg="#ffffff", fg_secondary="#a9a9a9"
         )
@@ -61,7 +62,7 @@ class ShLightCUDProfile(ColorProfile):
 class BSLightCUDProfile(ColorProfile):
     """Bootstrap light theme color profile with CUD palette."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             palette=CUD_PALETTE, fg="#212529", bg="#ffffff", fg_secondary="#adb5bd"
         )
@@ -70,7 +71,7 @@ class BSLightCUDProfile(ColorProfile):
 class BSDarkCUDProfile(ColorProfile):
     """Bootstrap dark theme color profile with CUD palette."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         palette = ["#adb5bd"] + CUD_PALETTE[1:]
         super().__init__(
             palette=palette, fg="#adb5bd", bg="#212529", fg_secondary="#495057"
@@ -103,7 +104,7 @@ class ShScaleProfile(PlotScaleProfile):
         marker_size: float,
         line_width: float,
         full_width_in: float,
-    ):
+    ) -> None:
         super().__init__(
             font_size=fs,
             axes_title_size=fs,
@@ -136,7 +137,7 @@ class ShPaperScaleProfile(ShScaleProfile):
     - \large: 12pt
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             fs=10.0,  # normalsize
             fs_small=9.0,  # small
@@ -160,7 +161,7 @@ class ShBookScaleProfile(ShScaleProfile):
     - \large: 14.4pt
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             fs=12.0,  # normalsize
             fs_small=10.95,  # small
@@ -175,7 +176,7 @@ class ShBookScaleProfile(ShScaleProfile):
 class _ShWebScaleProfile(ShScaleProfile):
     def __init__(
         self, fs_px: float, ms_px: float, lw_px: float, fw_px: float, dpi: float
-    ):
+    ) -> None:
         pt_per_px = 72.0 / dpi
         fs = fs_px * pt_per_px
         super().__init__(
@@ -195,7 +196,7 @@ class ShWebScaleProfile(_ShWebScaleProfile):
     Sizes are for a 16px font size at 96dpi (CSS reference px).
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         # CSS reference px is based on 96dpi.
         super().__init__(fs_px=16.0, ms_px=3.0, lw_px=2.0, fw_px=675.0, dpi=96.0)
 
@@ -209,7 +210,7 @@ class ShPresentationScaleProfile(_ShWebScaleProfile):
         dpi: Scale for converting pixel sizes to points.
     """
 
-    def __init__(self, dpi: float):
+    def __init__(self, dpi: float) -> None:
         super().__init__(fs_px=48.0, ms_px=9.0, lw_px=6.0, fw_px=1600.0, dpi=dpi)
 
 
@@ -218,14 +219,14 @@ class ShPresentationScaleProfile(_ShWebScaleProfile):
 
 
 class ShFontsetupFontProfile(FontProfile):
-    """LaTeX font profile using the `fontsetup` package.
+    """LaTeX font profile using the fontsetup package.
 
     See <https://www.ctan.org/pkg/fontsetup> for details on the package.
     This profile simply sets the latex preamble to load the package with
     the given font.
 
     Args:
-        font: One of the fonts supported by `fontsetup`. This value is
+        font: One of the fonts supported by fontsetup. This value is
             passed as the sole argument to the package.
     """
 
@@ -255,7 +256,7 @@ class ShFontsetupFontProfile(FontProfile):
         "xcharter",
     ]
 
-    def __init__(self, font: FontType = "default"):
+    def __init__(self, font: FontType = "default") -> None:
         valid_fonts = self.FontType.__args__  # type: ignore[attr-defined]
         if font not in valid_fonts:
             raise ValueError(
@@ -269,16 +270,16 @@ class ShFontsetupFontProfile(FontProfile):
 
 
 class ShPGFRcFontsFontProfile(FontProfile):
-    """LaTeX font profile combining `fontsetup` with system fonts.
+    """LaTeX font profile combining fontsetup with system fonts.
 
-    This profile loads the `fontsetup` package with the given font as in
-    `ShFontsetupFontProfile`, but also sets the `pgf.rcfonts` rcParam to
-    `True`, so that `matplotlib` will insert `fontspec` commands into
-    the LaTeX preamble to set `serif/sans-serif/monospace` fonts.
+    This profile loads the fontsetup package with the given font as in
+    `ShFontsetupFontProfile`, but also sets `pgf.rcfonts` to `True`,
+    so that Matplotlib will insert `fontspec` commands into
+    the LaTeX preamble to set serif/sans-serif/monospace fonts.
 
     Args:
         family: Default font family.
-        base_font: One of the fonts supported by `fontsetup`. This value
+        base_font: One of the fonts supported by fontsetup. This value
             is passed as the sole argument to the package.
         serif: Override for serif font. If `None`, `font.serif` from
             `rcParams` will be used.
@@ -295,7 +296,7 @@ class ShPGFRcFontsFontProfile(FontProfile):
         serif: Optional[str] = None,
         sans_serif: Optional[str] = None,
         monospace: Optional[str] = None,
-    ):
+    ) -> None:
         super().__init__(
             family=[family],
             latex_preamble=[r"\usepackage[%s]{fontsetup}" % base_font],
@@ -316,7 +317,7 @@ class ShPGFRcFontsFontProfile(FontProfile):
 class ShPrintAxesProfile(AxesProfile):
     """Axes profile for print."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             grid_axes="none",
             spines={"left", "bottom"},
@@ -341,7 +342,7 @@ class ShPrintAxesProfile(AxesProfile):
 class ShWebAxesProfile(AxesProfile):
     """Axes profile for web."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             grid_axes="both",
             grid_lines="major",
@@ -367,7 +368,7 @@ class ShWebAxesProfile(AxesProfile):
 class ShPresentationAxesProfile(AxesProfile):
     """Axes profile for presentation."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             grid_axes="y",
             grid_lines="major",
@@ -398,7 +399,9 @@ sh_rc_overrides = {"figure.titleweight": "bold"}
 
 
 class _ShFontsetupProfile(PlottingProfile):
-    def __init__(self, fontname: ShFontsetupFontProfile.FontType, **kwargs: Any):
+    def __init__(
+        self, fontname: ShFontsetupFontProfile.FontType, **kwargs: Any
+    ) -> None:
         super().__init__(
             font=ShFontsetupFontProfile(fontname),
             **{
@@ -421,7 +424,7 @@ class ShPaperProfile(_ShFontsetupProfile):
 
     def __init__(
         self, fontname: ShFontsetupFontProfile.FontType = "default", **rc_extra: Any
-    ):
+    ) -> None:
         super().__init__(
             fontname,
             color=ShLightCUDProfile(),
@@ -441,7 +444,7 @@ class ShBookProfile(_ShFontsetupProfile):
 
     def __init__(
         self, fontname: ShFontsetupFontProfile.FontType = "default", **rc_extra: Any
-    ):
+    ) -> None:
         super().__init__(
             fontname,
             color=ShLightCUDProfile(),
@@ -483,7 +486,7 @@ class ShWebProfile(PlottingProfile):
             Literal["dejavusans", "dejavuserif", "cm", "stix", "stixsans"]
         ] = None,
         **rc_extra: Any,
-    ):
+    ) -> None:
         if theme == "light":
             color_profile: ColorProfile = BSLightCUDProfile()
         elif theme == "dark":
@@ -542,7 +545,7 @@ class ShPresentationProfile(PlottingProfile):
         monospace_font: Optional[str] = None,
         dpi: Union[float, str] = 200.0,
         **rc_extra: Any,
-    ):
+    ) -> None:
         super().__init__(
             color=ShLightCUDProfile(),
             font=ShPGFRcFontsFontProfile(
@@ -563,7 +566,7 @@ class ShPresentationProfile(PlottingProfile):
 def make_builtin_profile_builder(
     profile_cls: type[PlottingProfile], **base_kwargs: Any
 ) -> Callable[..., PlottingProfile]:
-    def profile_builder(**kwargs):
+    def profile_builder(**kwargs: Any) -> PlottingProfile:
         return profile_cls(**base_kwargs, **kwargs)
 
     return profile_builder

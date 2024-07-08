@@ -38,6 +38,7 @@ plugins:
             - "https://jkoushik.me/corgy/9.2/objects.inv"
 
 markdown_extensions:
+  - admonition
   - smarty
   - pymdownx.highlight
   - pymdownx.superfences

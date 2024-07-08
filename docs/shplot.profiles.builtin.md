@@ -62,8 +62,9 @@ Profile for generating figures for presentations.
 
 Color Universal Design (CUD) palette.
 
-This is a color-blindness friendly palette.
-See <[https://jfly.uni-koeln.de/color/](https://jfly.uni-koeln.de/color/)> for details.
+This is a palette that is unambiguous to both colorblind and
+non-colorblind people. See <[https://jfly.uni-koeln.de/color/](https://jfly.uni-koeln.de/color/)> for
+details.
 
 ### *class* shplot.profiles.builtin.ShLightCUDProfile
 
@@ -149,14 +150,14 @@ Sizes are based on 48px font size, and will be scaled based on dpi.
 
 Bases: [`FontProfile`](shplot.profiles.md#shplot.profiles.FontProfile)
 
-LaTeX font profile using the `fontsetup` package.
+LaTeX font profile using the fontsetup package.
 
 See <[https://www.ctan.org/pkg/fontsetup](https://www.ctan.org/pkg/fontsetup)> for details on the package.
 This profile simply sets the latex preamble to load the package with
 the given font.
 
 * **Parameters:**
-  **font** (*FontType*) – One of the fonts supported by `fontsetup`. This value is
+  **font** (*FontType*) – One of the fonts supported by fontsetup. This value is
   passed as the sole argument to the package.
 
 #### FontType
@@ -167,16 +168,16 @@ alias of `Literal`[‘default’, ‘olddefault’, ‘cambria’, ‘concrete�
 
 Bases: [`FontProfile`](shplot.profiles.md#shplot.profiles.FontProfile)
 
-LaTeX font profile combining `fontsetup` with system fonts.
+LaTeX font profile combining fontsetup with system fonts.
 
-This profile loads the `fontsetup` package with the given font as in
-`ShFontsetupFontProfile`, but also sets the `pgf.rcfonts` rcParam to
-`True`, so that `matplotlib` will insert `fontspec` commands into
-the LaTeX preamble to set `serif/sans-serif/monospace` fonts.
+This profile loads the fontsetup package with the given font as in
+`ShFontsetupFontProfile`, but also sets `pgf.rcfonts` to `True`,
+so that Matplotlib will insert `fontspec` commands into
+the LaTeX preamble to set serif/sans-serif/monospace fonts.
 
 * **Parameters:**
   * **family** (*list* *[**str* *]*) – Default font family.
-  * **base_font** (*ShFontsetupFontProfile.FontType*) – One of the fonts supported by `fontsetup`. This value
+  * **base_font** (*ShFontsetupFontProfile.FontType*) – One of the fonts supported by fontsetup. This value
     is passed as the sole argument to the package.
   * **serif** (*list* *[**str* *]*) – Override for serif font. If `None`, `font.serif` from
     `rcParams` will be used.

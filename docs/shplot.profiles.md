@@ -6,14 +6,14 @@ Bases: `Corgy`
 
 Base class for profiles.
 
-Profile classes are thin wrappers around subsets of `matplotlib`
+Profile classes are thin wrappers around subsets of Matplotlib
 parameters. Once instantiated, they can be used to generate a
 dictionary, which can be used to update `matplotlib.rcParams`.
 
 Profile classes have a dataclass-like interface. All attributes are
 exposed as properties, and can be set either at initialization (as
 keyword arguments) or later. Unless specified otherwise, attributes
-directly correspond to `matplotlib` parameters with the same name.
+directly correspond to Matplotlib parameters with the same name.
 
 ### Examples
 
@@ -33,11 +33,12 @@ directly correspond to `matplotlib` parameters with the same name.
 
 #### rc()
 
-Return profile configuration as a `dict` of `rcParams`.
+Get profile configuration.
 
-Unset attributes are not included in the returned dictionary so
-that different profiles can be combined together.
-
+* **Returns:**
+  Dictionary with `rcParams`. Unset attributes are not
+  included in the returned dictionary so that different
+  profiles can be combined together.
 * **Return type:**
   dict[str, *Any*]
 
@@ -49,6 +50,8 @@ Update `matplotlib.rcParams` with profile configuration.
   **reload_mpl** (*bool*) – Whether to reload `matplotlib` and `pyplot`
   modules before applying the configuration. Reloading is
   necessary for fonts to be updated.
+* **Return type:**
+  None
 
 ### Examples
 
@@ -69,6 +72,8 @@ Context manager for `config` method.
 * **Parameters:**
   **reload_mpl** (*bool*) – Whether to first reload `matplotlib` and
   `pyplot` modules.
+* **Return type:**
+  *Generator*[None, None, None]
 
 ### Examples
 
@@ -88,7 +93,7 @@ black
 
 Bases: [`ProfileBase`](#shplot.profiles.ProfileBase)
 
-Wrapper for color-related matplotlib params.
+Wrapper for color related Matplotlib params.
 
 #### *property* palette *: list[str]*
 
@@ -118,7 +123,7 @@ Whether to save figures with transparent background.
 
 Bases: [`ProfileBase`](#shplot.profiles.ProfileBase)
 
-Wrapper for font-related matplotlib params.
+Wrapper for font related Matplotlib params.
 
 #### *property* family *: list[str]*
 
@@ -178,7 +183,7 @@ Float or string type.
 
 Bases: [`ProfileBase`](#shplot.profiles.ProfileBase)
 
-Wrapper for plot scale-related matplotlib params.
+Wrapper for scale related Matplotlib params.
 
 #### *property* font_size *: float*
 
@@ -236,79 +241,79 @@ Default figure aspect ratio (width/height).
 
 Bases: [`ProfileBase`](#shplot.profiles.ProfileBase)
 
-Wrapper for axes-related matplotlib params.
+Wrapper for axes related Matplotlib params.
 
 #### *property* grid_axes *: Literal['x', 'y', 'both', 'none']*
 
-which axes to draw grid lines on
+Which axes to draw grid lines on.
 
 #### *property* grid_lines *: Literal['major', 'minor', 'both']*
 
-which grid lines to draw
+Which grid lines to draw.
 
 #### *property* spines *: set[Literal['left', 'right', 'bottom', 'top']]*
 
-which sides to draw spines on
+Which sides to draw spines on.
 
 #### *property* axis_below *: Literal['all', 'line', 'none']*
 
-where to draw axis grid lines and ticks
+Where to draw axis grid lines and ticks.
 
 #### *property* xticks_top *: Literal['none', 'major', 'both']*
 
-which tick lines to draw on the top x-axis
+Which tick lines to draw on the top x-axis.
 
 #### *property* xticks_bottom *: Literal['none', 'major', 'both']*
 
-which tick lines to draw on the bottom x-axis
+Which tick lines to draw on the bottom x-axis.
 
 #### *property* xlabels_top *: bool*
 
-whether to show labels on the top x-axis
+Whether to show labels on the top x-axis.
 
 #### *property* xlabels_bottom *: bool*
 
-whether to show labels on the bottom x-axis
+Whether to show labels on the bottom x-axis.
 
 #### *property* xtick_direction *: Literal['in', 'out', 'inout']*
 
-direction of x-axis ticks
+Direction of x-axis ticks.
 
 #### *property* xtick_alignment *: Literal['left', 'center', 'right']*
 
-alignment of x-axis tick labels
+Alignment of x-axis tick labels.
 
 #### *property* xlabel_position *: Literal['left', 'center', 'right']*
 
-position of x-axis label
+Position of x-axis label.
 
 #### *property* yticks_left *: Literal['none', 'major', 'both']*
 
-which tick lines to draw on the left y-axis
+Which tick lines to draw on the left y-axis.
 
 #### *property* yticks_right *: Literal['none', 'major', 'both']*
 
-which tick lines to draw on the right y-axis
+Which tick lines to draw on the right y-axis.
 
 #### *property* ylabels_left *: bool*
 
-whether to show labels on the left y-axis
+Whether to show labels on the left y-axis.
 
 #### *property* ylabels_right *: bool*
 
-whether to show labels on the right y-axis
+Whether to show labels on the right y-axis.
 
 #### *property* ytick_direction *: Literal['in', 'out', 'inout']*
 
-direction of y-axis ticks
+Direction of y-axis ticks.
 
 #### *property* ytick_alignment *: Literal['bottom', 'center', 'top', 'baseline', 'center_baseline']*
 
-alignment of y-axis tick labels
+Alignment of y-axis tick labels.
 
 #### *property* ylabel_position *: Literal['bottom', 'center', 'top']*
 
-position of y-axis labels
+Position of y-axis labels.
 
 ### *class* shplot.profiles.PlottingProfile(\*\*kwargs)
 
@@ -332,6 +337,9 @@ will override any values set by the profile.
 {'grid.color': 'gray', 'legend.edgecolor': 'black',
 'backend': 'Agg'}
 ```
+
+* **Parameters:**
+  **kwargs** (*Any*)
 
 #### *property* color *: [ColorProfile](#shplot.profiles.ColorProfile)*
 
