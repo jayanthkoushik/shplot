@@ -7,6 +7,7 @@ packages = [{ include = "shplot", from = "src" }]
 include = [
   { path = "tests", format = "sdist" },
   { path = "docs", format = "sdist" },
+  { path = "scripts/plot_demos.py", format = "sdist" },
   { path = "CHANGELOG.md", format = "sdist" },
 ]
 repository = "https://github.com/jayanthkoushik/shplot"
