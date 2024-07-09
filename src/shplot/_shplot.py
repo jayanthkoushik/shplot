@@ -54,7 +54,14 @@ class ShPlot(Corgy):
         >>> from argparse import ArgumentParser
         >>> argparser = ArgumentParser(add_help=False, usage="")
         >>> ShPlot.add_args_to_parser(argparser)
-        >>> argparser.print_help()  # doctest: +NORMALIZE_WHITESPACE
+        >>> print(
+        ...     argparser.format_help().replace(
+        ...         # This is to prevent the doctest from failing
+        ...         # in Python 3.9, where the 'options' section
+        ...         # has a different name.
+        ...         "optional arguments:", "options:"
+        ...     )
+        ... )  # doctest: +NORMALIZE_WHITESPACE
         usage:
         <BLANKLINE>
         options:
