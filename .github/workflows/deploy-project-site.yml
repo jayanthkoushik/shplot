@@ -19,7 +19,7 @@ jobs:
         with:
           python-version-file: pyproject.toml
           cache: poetry
-      - run: poetry install --only site
+      - run: poetry install --without dev
       - name: Configure Git
         run: |
           git config --global user.name "${{ github.actor }}"
