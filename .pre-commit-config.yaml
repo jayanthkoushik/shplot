@@ -3,7 +3,7 @@ default_stages: [pre-commit]
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
       - id: check-case-conflict
       - id: check-symlinks
@@ -16,14 +16,14 @@ repos:
       - id: detect-private-key
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v8.10.1
+    rev: v9.2.0
     hooks:
       - id: cspell
         name: Spell check docs
         files: "docs/.*\\.md|README.md"
 
   - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
-    rev: v9.16.0
+    rev: v9.22.0
     hooks:
       - id: commitlint
         name: Lint commit message
